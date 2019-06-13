@@ -31,7 +31,7 @@ function! s:yesno(msg) abort
   endif
 endfunction
 
-function! virk#findSettingsDir(dirname) abort
+function! s:findSettingsDir(dirname) abort
   if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
     return
   endif
@@ -41,43 +41,43 @@ function! virk#findSettingsDir(dirname) abort
   endif
   let l:parentDir = strpart(a:dirname, 0, strridx(a:dirname, "/"))
   if isdirectory(l:parentDir)
-    return virk#findSettingsDir(l:parentDir)
+    return s:findSettingsDir(l:parentDir)
   endif
 endfunction
 
-function! virk#handle#settings(fn)
+function! s:handleSettings(fn)
   if ! isreadable(a:fn)
     return
   endif
   exec "source " . a:fn
 endfunction
 
-function! virk#handle#session(fn)
+function! s:handleSession(fn)
   if ! isreadable(a:fn)
     return
   endif
 endfunction
 
-function! virk#handle#coc(fn)
+function! s:handleCoc(fn)
   if ! isreadable(a:fn)
     return
   endif
 endfunction
 
-function! virk#handle#tags(fn)
+function! s:handleTags(fn)
   if ! isreadable(a:fn)
     return
   endif
 endfunction
 
-function! virk#sourceSettings(fns)
-  call virk#handle#settings(fns["project"])
-  call virk#handle#session(fns["session"])
-  call virk#handle#coc(fns["coc"])
-  call virk#handle#tags(fns["tags"])
+function! s:sourceSettings(fns)
+  call s:handleSettings(fns["project"])
+  call s:handleSession(fns["session"])
+  call s:handleCoc(fns["coc"])
+  call s:handleTags(fns["tags"])
 endfunction
 
-function! virk#setSourceFiles(dir) abort
+function! s:setSourceFiles(dir) abort
   return {
         \   "project" : a:dir . "/" . get(g:, "virk_settings_filename", "virkspace.vim"),
         \   "session" : a:dir . "/" . get(g:, "virk_session_filename", "Session.vim"),
@@ -88,13 +88,13 @@ endfunction
 
 function! VSSourceProjectSettings(fname) abort
   let l:curDir = fnamemodify(a:fname, ":p:h")
-  let l:settingsDir = virk#findSettingsDir(l:curDir)
+  let l:settingsDir = s:findSettingsDir(l:curDir)
   if !len(l:settingsDir) 
     echom "[ProjectVim] No settings directory found"
     return
   endif
-  let l:settingsFiles = virk#setSourceFiles(l:settings)
-  call virk#sourceSettings(l:settingsFiles)
+  let l:settingsFiles = s:setSourceFiles(l:settings)
+  call s:sourceSettings(l:settingsFiles)
 endfunction
 
 function! VSCreateProjectDir() abort
