@@ -7,26 +7,18 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +1 fff.vim
-badd +3 test.py
-badd +1 .virkspace/session.vim
-badd +1 .virkspace/virkspace.vim
+badd +5 test.py
+badd +1 .virkspace/virkvonce.vim
 argglobal
 silent! argdel *
-set lines=59 columns=175
+set lines=62 columns=186
 edit test.py
 set splitbelow splitright
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 wincmd t
 set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe '1resize ' . ((&lines * 28 + 29) / 59)
-exe '2resize ' . ((&lines * 28 + 29) / 59)
 argglobal
 setlocal fdm=syntax
 setlocal fde=0
@@ -36,33 +28,12 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal nofen
-let s:l = 3 - ((2 * winheight(0) + 14) / 28)
+let s:l = 5 - ((4 * winheight(0) + 30) / 60)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-3
-normal! 09|
-wincmd w
-argglobal
-if bufexists('.virkspace/virkspace.vim') | buffer .virkspace/virkspace.vim | else | edit .virkspace/virkspace.vim | endif
-setlocal fdm=syntax
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal nofen
-let s:l = 1 - ((0 * winheight(0) + 14) / 28)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-1
+5
 normal! 0
-wincmd w
-2wincmd w
-exe '1resize ' . ((&lines * 28 + 29) / 59)
-exe '2resize ' . ((&lines * 28 + 29) / 59)
 tabnext 1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
