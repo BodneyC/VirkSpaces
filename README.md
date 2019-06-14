@@ -7,7 +7,7 @@ Fairly minimal workspace setup for Vims of all kinds.
 
 Either add to rtp:
 
-   let &runtimepath.=",/path/to/virkspaces/root/dir/"
+    let &runtimepath.=",/path/to/virkspaces/root/dir/"
 
 Or install with your favourite plugin manager:
 
