@@ -98,15 +98,16 @@ command! -nargs=0 VSSetVirkDir call VSSetVirkDir()
 
 function! VSLoadVirkSpace()
   call VSSetVirkDir() 
-  if s:virk_settings_dir != "0"
-    call VSSetPWD()
-    call VSSetTags()
-    if g:virk_source_session
-      call VSSetSession()
-    endif
-    call VSSetOnce()
-    call VSSetSettings()
+  if s:virk_settings_dir == "0"
+    return
   endif
+  call VSSetPWD()
+  call VSSetTags()
+  if g:virk_source_session
+    call VSSetSession()
+  endif
+  call VSSetOnce()
+  call VSSetSettings()
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
 endfunction
 command! -nargs=0 VSLoadVirkSpace call VSLoadVirkSpace()
