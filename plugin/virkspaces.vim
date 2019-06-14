@@ -53,7 +53,7 @@ command! -nargs=0 VSSetSettings call VSSetSettings()
 
 function! VSSetSession()
   let l:fn = s:virk_settings_dir . "/" . g:virk_session_filename
-  if ! filereadable(l:fn)
+  if ! filereadable(l:fn) || argc() > 0
     return
   endif
   exec "source " . l:fn
