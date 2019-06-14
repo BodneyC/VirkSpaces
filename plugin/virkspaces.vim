@@ -164,6 +164,9 @@ endfunction
 command! -nargs=1 VSVonceWrite call VSVonceWrite(<f-args>)
 
 function! VSMakeSessionOnLeave()
+  if s:virk_settings_dir == "0"
+    return
+  endif
   if bufwinnr("__vista__") != -1
     tabdo Vista!
     call VSVonceWrite("Vista | wincmd h")
