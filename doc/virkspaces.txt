@@ -22,7 +22,8 @@ CONTENTS                                                 *VirkSpaceContents*
 
   1. Usage ..................................... |VirkSpaceUsage|
     a. Functions ............................... |VirkSpaceFunctions|
-    b. AutoCmds ................................ |VirkSpaceAutoCmds|
+    b. Commands ................................ |VirkSpaceCommands|
+    c. AutoCmds ................................ |VirkSpaceAutoCmds|
   2. Configuration ............................. |VirkSpaceConfiguration|
     a. Global variables ........................ |VirkSpaceGlobalVariables|
   3. TODOs ..................................... |VirkSpaceTODOs|
@@ -88,7 +89,7 @@ Most of the functionality is accomplished through the plugins functions:
                                   - |VSSetPWD|
                                   - |VSSetTags|
                                   - If |g:virk_source_session| is true,
-                                    |VSSetSession|
+                                     |VSSetSession|
                                   - |VSSetOnce|
                                   - |VSSetSettings|
 
@@ -100,7 +101,9 @@ Most of the functionality is accomplished through the plugins functions:
                                   |g:virk_dirname|.
 
   
-  *VSVonceWrite(cmd)*         Params: None
+  *VSVonceWrite*              Params:
+                              `cmd` - String to write to 
+                                    |g:virk_vonce_filename|
   
                             Desc: Write `cmd` to |g:virk_vonce_filename| 
                                   if the line doesn't exists (regex 
@@ -117,6 +120,42 @@ Most of the functionality is accomplished through the plugins functions:
 
                             Desc: Shows some information about the current
                                   state of |VirkSpaces|.
+
+
+--------------------------------------------------------------------------
+COMMANDS                                                *VirkSpaceCommands*
+
+
+All commands are taken directly from the functions above, with the same 
+ params.
+
+  |VSSetSettings|
+
+  |VSSetSession|
+
+  |VSSetTags|
+
+  |VSSetPWD|
+
+  |VSSetOnce|
+
+  |VSSetVirkDir|
+
+  |VSLoadVirkSpace|
+
+  |VSCreateVirkSpace|
+
+  |VSMakeSession|
+
+  |VSVonceWrite|
+
+  |VSMakeSessionOnLeave|
+
+  |VSVirkSpaceInfo|
+
+
+--------------------------------------------------------------------------
+AUTOCMDS                                                *VirkSpaceAutoCmds*
 
 
 Much of this is automated through |autcmd|s:
@@ -201,13 +240,17 @@ There are a couple of bit that still need doing for this project to be
 
  - [ *VirkSpaceTesting* ] Test the thing...
 
+ - Options for Vista/NERDTree directions (the |wincmd| commands)
+
 
 ==========================================================================
 BUGS                                                         *VirkSpaceBugs*
 
 
-No bugs as yet, but they are likely to come up in the testing, see
- |VirkSpaceTesting|.
+ - There is the simple manner of testing ( |VirkSpaceTesting| ) that needs 
+   doing to find bugs, I'm sure they'll come looking for me.
+
+ - Vista doesn't launch if NERDTree is also launched
 
 
 ==========================================================================

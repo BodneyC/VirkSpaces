@@ -1,20 +1,19 @@
-" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-"                                                                                                             "
-"                                      ,-.  .--.--.                                                           "
-"          ,---.  ,--,             ,--/ /| /  /    '. ,-.----.                                                "
-"         /__./|,--.'|    __  ,-.,--. :/ ||  :  /`. / \    /  \                                               "
-"    ,---.;  ; ||  |,   ,' ,'/ /|:  : ' / ;  |  |--`  |   :    |                                 .--.--.      "
-"   /___/ \  | |`--'_   '  | |' ||  '  /  |  :  ;_    |   | .\ :  ,--.--.     ,---.     ,---.   /  /    '     "
-"   \   ;  \ ' |,' ,'|  |  |   ,''  |  :   \  \    `. .   : |: | /       \   /     \   /     \ |  :  /`./     "
-"    \   \  \: |'  | |  '  :  /  |  |   \   `----.   \|   |  \ :.--.  .-. | /    / '  /    /\ ||  :  ;_       "
-"     ;   \  ' .|  | :  |  | '   '  : |. \  __ \  \  ||   : .  | \__\/: . ..    ' /  .    ' /   \  \    `.    "
-"      \   \   ''  : |__;  : |   |  | ' \ \/  /`--'  /:     |`-' ," .--.; |'   ; :__ '   ; - /|  `----.   \   "
-"       \   `  ;|  | '.'|  , ;   '  : |--''--'.     / :   : :   /  /  ,.  |'   | '.'|'   |  / | /  /`--'  /   "
-"        :   \ |;  :    ;---'    ;  |,'     `--'---'  |   | :  ;  :   .'   \   :    :|   :    |'--'.     /    "
-"         '---" |  ,   /         '--'                 `---'.|  |  ,     .-./\   \  /  \   \  /   `--'---'     "
-"                ---`-'                                 `---`   `--`---'     `----'    `----'                 "
-"                                                                                                             "
-" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+"
+"                                _   -.--.
+"         ,---. --,          --/ /| /    ',----.
+"        /__./,-.'|  __  ,-,-. :/  :  /`. \  /  \
+"     ,-.;  ; | |,  , ,'/ /: : ' / |  |--`| :    |                    .-.--.
+"    /_/ \  | `-'_  ' | |' | '  / ::  ;_  | | .\ : --.     -.    --. / /    '
+"    \ ;  \ ' ,','| | |   ,' |  | \ \    `. : |: |/   \   /  \  /   \    /`./
+"     \ \  \: ' | | ' :  / | |   \ \ \-.  | |  \ .- -. | / / ' /  /      ;_
+"      ; \  ' | | : | | '  ' : |. \_ \  \ | : .  |\\ . .. ' / .  ' / \ \    `.
+"       \ \   ' : |_; : |  | | ' \ |/`--' :   |`-',..; |'  :__' ;   / `---.   \
+"        \ `  | | '.| , ;  ' : |--/'.     : : :  /  .  |'  '.'' |  / / /`--'  /
+"         : \ ; :  |`--'   ; |,'   --'---'| | : ;   '   |     | :    --.     /
+"          '-"| ,  |       '-'            `-'.| |    .-./\\  / \ \  / `-'---'
+"              --`-'                       `--`  `--'     `-'   ---'
+"
+"
 let g:virk_enable = get(g:, "virk_enable", 1)
 let g:virk_dirname = get(g:, "virk_dirname", ".virkspace")
 let g:virk_settings_filename = get(g:, "virk_settings_filename", "virkspace.vim")
@@ -50,6 +49,7 @@ function! VSSetSettings()
     exec "source " . l:fn
   endif
 endfunction
+command! -nargs=0 VSSetSettings call VSSetSettings()
 
 function! VSSetSession()
   let l:fn = s:virk_settings_dir . "/" . g:virk_session_filename
@@ -62,6 +62,7 @@ function! VSSetSession()
     " exec "bd " . l:fn
   endif
 endfunction
+command! -nargs=0 VSSetSession call VSSetSession()
 
 function! VSSetTags()
   let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
@@ -69,10 +70,12 @@ function! VSSetTags()
     exec "set tags=" . l:fn
   endif
 endfunction
+command! -nargs=0 VSSetTags call VSSetTags()
 
 function! VSSetPWD()
   cd `=s:virk_settings_dir . "/.."`
 endfunction
+command! -nargs=0 VSSetPWD call VSSetPWD()
 
 function! VSSetOnce()
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
@@ -81,6 +84,7 @@ function! VSSetOnce()
     exec "source " . l:fn
   endif
 endfunction
+command! -nargs=0 VSSetOnce call VSSetOnce()
 
 function! VSSetVirkDir() abort
   let l:curDir = expand("%:p:h")
@@ -91,6 +95,7 @@ function! VSSetVirkDir() abort
   endif
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
 endfunction
+command! -nargs=0 VSSetVirkDir call VSSetVirkDir()
 
 function! VSLoadVirkSpace()
   call VSSetVirkDir() 
@@ -104,8 +109,9 @@ function! VSLoadVirkSpace()
     call VSSetSettings()
   endif
 endfunction
+command! -nargs=0 VSLoadVirkSpace call VSLoadVirkSpace()
 
-" Management Functions
+"""""""" Management Functions
 
 function! VSCreateVirkSpace() abort
   let l:projDir = input("Dir: ", expand("%:p:h"))
@@ -113,7 +119,8 @@ function! VSCreateVirkSpace() abort
     if ! s:yesno("\"" . l:projDir . "\" is not a directory, make dirs?")
       return
     endif
-  else
+  endif
+  if isdirectory(l:projDir . "/" . g:virk_dirname)
     if ! s:yesno("\"" . l:projDir . "/" . g:virk_dirname . "\" exists, overwrite?")
       return
     else
@@ -123,7 +130,7 @@ function! VSCreateVirkSpace() abort
       endif
     endif
   endif
-  call mkdir(fnameescape(l:projDir . "/" . g:virk_dirname), "p")
+  call mkdir(l:projDir . "/" . g:virk_dirname)
   echom "[VirkSpaces] Project directory created"
   if s:yesno("CD to project directory parent?")
     return
@@ -136,6 +143,7 @@ function! VSMakeSession()
   echom s:virk_settings_dir . "/" . g:virk_session_filename
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
 endfunction
+command! -nargs=0 VSMakeSession call VSMakeSession()
 
 function! VSVonceWrite(cmd)
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
@@ -152,28 +160,31 @@ function! VSVonceWrite(cmd)
   call add(l:vonce, a:cmd)
   call writefile(l:vonce, l:fn)
 endfunction
+command! -nargs=1 VSVonceWrite call VSVonceWrite(<f-args>)
 
 function! VSMakeSessionOnLeave()
-  if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
-    tabdo NERDTreeClose
-    call VSVonceWrite("NERDTree | wincmd l")
-  endif
   if bufwinnr("__vista__") != -1
     tabdo Vista!
     call VSVonceWrite("Vista | wincmd h")
   endif
+  if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
+    tabdo NERDTreeClose
+    call VSVonceWrite("NERDTree | wincmd l")
+  endif
   call VSMakeSession()
 endfunction
+command! -nargs=0 VSMakeSessionOnLeave call VSMakeSessionOnLeave()
 
-" Helpers
+"""""""" Helper functions
 
 " https://vi.stackexchange.com/questions/9432/confirmmsg-choices-without-newline-on-msg
 function! s:yesno(msg) abort
   echo a:msg . " [yn] "
-  if nr2char(getchar())  ==? "y"
+  let l:ans = nr2char(getchar())
+  if l:ans =~ "y"
     return 1
     return
-  elseif l:answer ==? "n"
+  elseif l:ans =~ "n"
     return 0
   else
     echo "[yn]"
@@ -205,7 +216,7 @@ function! VSVirkSpaceInfo()
 endfunction
 command! -nargs=0 VSVirkSpaceInfo call VSVirkSpaceInfo()
 
-" Automation
+"""""""" Automation augroup
 
 augroup project-vim
   autocmd!
