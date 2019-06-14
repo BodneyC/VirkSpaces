@@ -205,7 +205,7 @@ endfunction
 
 function! VSVirkSpaceInfo()
   let l:tmpFile = tempname()
-  if ! g:virk_enable
+  if g:virk_enable
     call writefile([
           \   "Is VirkSpace enabled:  Yes",
           \   "VirkSpace directory:   " . s:virk_settings_dir,
