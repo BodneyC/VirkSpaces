@@ -93,7 +93,6 @@ function! VSSetVirkDir() abort
     echom "[VirkSpaces] No virkspace found"
     return
   endif
-  echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
 endfunction
 command! -nargs=0 VSSetVirkDir call VSSetVirkDir()
 
@@ -108,6 +107,7 @@ function! VSLoadVirkSpace()
     call VSSetOnce()
     call VSSetSettings()
   endif
+  echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
 endfunction
 command! -nargs=0 VSLoadVirkSpace call VSLoadVirkSpace()
 
