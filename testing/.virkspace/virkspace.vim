@@ -1,1 +1,1 @@
-set conceallevel=0
+set sw=123
