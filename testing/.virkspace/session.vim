@@ -10,9 +10,13 @@ set shortmess=aoO
 badd +6 test.py
 badd +22 .virkspace/session.vim
 badd +1 .virkspace/virkvonce.vim
+badd +1 /tmp/nvim3lEuOj/3
+badd +1 /tmp/nvimMP0ze2/3
+badd +1 /tmp/nvimumkDU0/3
+badd +0 /tmp/nvim3vrGgz/3
 argglobal
 silent! argdel *
-edit test.py
+edit /tmp/nvimumkDU0/3
 set splitbelow splitright
 wincmd t
 set winminheight=0
@@ -28,12 +32,12 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal nofen
-let s:l = 6 - ((5 * winheight(0) + 28) / 57)
+let s:l = 1 - ((0 * winheight(0) + 28) / 57)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-6
-normal! 05|
+1
+normal! 0
 tabnext 1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
