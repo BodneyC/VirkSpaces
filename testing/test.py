@@ -3,7 +3,7 @@ class Fish:
         self.args = args
 
 def main():
-    fish = Fish("eee")
+    ish = Fish("eee")
 
 if __name__ == "__main__":
     main()
