@@ -51,6 +51,12 @@ Most of the functionality is accomplished through the plugins functions:
                                   append at will.
   
 
+  *VSCleanVirkSpace*          Params: None
+            
+                            Desc: With confirmation, delete the files
+                                  in the |VirkSpace|
+
+
   *VSSetVirkDir*              Params: None
   
                             Desc: Find and set |g:virk_dirname|, uses
@@ -63,9 +69,10 @@ Most of the functionality is accomplished through the plugins functions:
                             Desc: Source |g:virk_settings_filename|.
   
 
-  *VSSetVonce*                 Params: None
+  *VSSetVonce*                Params: None
 
                             Desc: Source |g:virk_vonce_filename|.
+
   
   *VSSetSession*              Params: None
   
@@ -80,6 +87,12 @@ Most of the functionality is accomplished through the plugins functions:
   *VSSetPWD*                  Params: None
   
                             Desc: Change directory to project |VirkSpace|.
+
+
+  *VSCoCSettings*             Params: None
+                
+                            Desc: Sources CoC settings from
+                                  |g:virk_coc_filename|
   
   
   *VSLoadVirkSpace*           Params: None
@@ -90,6 +103,8 @@ Most of the functionality is accomplished through the plugins functions:
                                   - |VSSetTags|
                                   - If |g:virk_source_session| is true,
                                      |VSSetSession|
+                                  - If |g:virk_coc_settings_enable| is 
+                                     true, |VSCoCSettings|
                                   - |VSSetVonce|
                                   - |VSSetSettings|
 
@@ -141,7 +156,11 @@ All commands are taken directly from the functions above, with the same
 
   |VSSetVirkDir|
 
+  |VSCoCSettings|
+
   |VSLoadVirkSpace|
+
+  |VSCleanVirkSpace|
 
   |VSCreateVirkSpace|
 
@@ -217,12 +236,16 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
                                    Desc: Specifies filename for tags file.
   
   
-  *g:virk_coc_root_enable*           Default: `1`
+  *g:virk_coc_settings_enable*       Default: `1`
   
-                                   Desc: Sets `b:coc_root_patterns` to
-                                    |g:virk_dirname| to pick up CoC
-                                    settings (in `coc-settings.json`).
-  
+                                   Desc: Specifies whether CoC settings 
+                                         should be sources from the 
+                                         |VirkSpace|.
+
+  *g:virk_coc_filename*              Default: `coc-settings.json`
+
+                                   Desc: Specifies the filename in which to
+                                         find CoC settings.
   
   *g:virk_source_session*            Default: `1`
   

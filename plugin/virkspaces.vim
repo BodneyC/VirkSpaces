@@ -21,13 +21,14 @@ let g:virk_settings_filename = get(g:, "virk_settings_filename", "virkspace.vim"
 let g:virk_vonce_filename = get(g:, "virk_vonce_filename", "virkvonce.vim")
 let g:virk_session_filename = get(g:, "virk_session_filename", "session.vim")
 let g:virk_tags_filename = get(g:, "virk_tags_filename", "tags")
-let g:virk_coc_root_enable = get(g:, "virk_coc_root_enable", 1)
+let g:virk_coc_filename = get(g:, "virk_coc_filename", "coc-settings.json")
+let g:virk_coc_settings_enable = get(g:, "virk_coc_settings_enable", 1)
 let g:virk_source_session = get(g:, "virk_source_session", 1)
 let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
 
 let s:virk_settings_dir = ""
 
-set ssop+=resize,winpos,winsize,folds
+" set ssop+=resize,winpos,winsize,folds
 
 function! s:findSettingsDir(dirname) abort
   if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
@@ -90,21 +91,37 @@ function! VSSetVirkDir() abort
   let l:curDir = expand("%:p:h")
   let s:virk_settings_dir = s:findSettingsDir(l:curDir)
   if s:virk_settings_dir == "None"
-    echom "[VirkSpaces] No virkspace found"
     return
   endif
 endfunction
 command! -nargs=0 VSSetVirkDir call VSSetVirkDir()
 
+function! VSCoCSettings()
+  let l:fn = s:virk_settings_dir . "/" . g:virk_coc_filename
+  if filereadable(l:fn)
+    let false = 0
+    let true = 1
+    let json = eval(join(readfile(l:fn)))
+    for [k, v] in items(json)
+      exec "call coc#config('" . k . "', " . v . ")"
+    endfor
+  endif
+endfunction
+command! -nargs=0 VSCoCSettings call VSCoCSettings()
+
 function! VSLoadVirkSpace()
   call VSSetVirkDir() 
   if s:virk_settings_dir == "0"
+    echom "[VirkSpaces] No virkspace found"
     return
   endif
   call VSSetPWD()
   call VSSetTags()
-  if g:virk_source_session
+  if g:virk_source_session && argc() == 0
     call VSSetSession()
+  endif
+  if g:virk_coc_settings_enable != 0
+    call VSCoCSettings()
   endif
   call VSSetVonce()
   call VSSetSettings()
@@ -113,6 +130,32 @@ endfunction
 command! -nargs=0 VSLoadVirkSpace call VSLoadVirkSpace()
 
 """""""" Management Functions
+
+function! VSCleanVirkSpace() abort
+  if s:virk_settings_dir == "0"
+    return
+  endif
+  let l:delall = s:yesno("Delete all in " . s:virk_settings_dir . "?")
+  for l:fn in [
+        \   g:virk_settings_filename, 
+        \   g:virk_session_filename, 
+        \   g:virk_vonce_filename,
+        \   g:virk_tags_filename, 
+        \   g:virk_coc_filename
+        \ ]
+    let l:fn = s:virk_settings_dir . "/" . l:fn
+    if filereadable(l:fn) 
+      if l:delall 
+        call delete(l:fn)
+      else
+        if s:yesno("Delete " . l:fn . "?")
+          call delete(l:fn)
+        endif
+      endif
+    endif
+  endfor
+endfunction
+command! -nargs=0 VSCleanVirkSpace call VSCleanVirkSpace()
 
 function! VSCreateVirkSpace() abort
   let l:projDir = input("Dir: ", expand("%:p:h"))
@@ -147,7 +190,7 @@ function! VSMakeSession()
 endfunction
 command! -nargs=0 VSMakeSession call VSMakeSession()
 
-function! VSVonceWrite(cmd)
+function! VSVonceWrite(cmd, odr)
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
   if ! filereadable(l:fn)
     call writefile([a:cmd], l:fn)
@@ -159,7 +202,12 @@ function! VSVonceWrite(cmd)
       return
     endif
   endfor
-  call add(l:vonce, a:cmd)
+  echom l:vonce
+  if a:odr
+    call reverse(add(reverse(l:vonce), a:cmd))
+  else
+    call add(l:vonce, a:cmd)
+  endif
   call writefile(l:vonce, l:fn)
 endfunction
 command! -nargs=1 VSVonceWrite call VSVonceWrite(<f-args>)
@@ -170,11 +218,11 @@ function! VSMakeSessionOnLeave()
   endif
   if bufwinnr("__vista__") != -1
     tabdo Vista!
-    call VSVonceWrite("Vista | wincmd h")
+    call VSVonceWrite("Vista!! | Vista!! | wincmd h", 1)
   endif
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     tabdo NERDTreeClose
-    call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l")
+    call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l", 0)
   endif
   call VSMakeSession()
 endfunction
@@ -211,7 +259,7 @@ function! VSVirkSpaceInfo()
           \   "Is VirkSpace enabled:  Yes",
           \   "VirkSpace directory:   " . s:virk_settings_dir,
           \   "Make session on leave: " . s:booleanToString(g:virk_make_session_on_leave),
-          \   "Source CoC settings:   " . s:booleanToString(g:virk_coc_root_enable)
+          \   "Source CoC settings:   " . s:booleanToString(g:virk_coc_settings_enable)
           \ ], l:tmpFile)
   else
     call writefile(["Is VirkSpace enabled: No"], l:tmpFile)
@@ -225,7 +273,7 @@ command! -nargs=0 VSVirkSpaceInfo call VSVirkSpaceInfo()
 
 augroup project-vim
   autocmd!
-  autocmd VimEnter * nested if g:virk_enable && argc() == 0
+  autocmd VimEnter * nested if g:virk_enable
         \ |   call VSLoadVirkSpace()
         \ | endif
   autocmd BufEnter * if g:virk_enable
