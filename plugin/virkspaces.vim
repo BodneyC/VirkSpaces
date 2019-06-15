@@ -16,6 +16,7 @@
 "
 let g:virk_enable = get(g:, "virk_enable", 1)
 let g:virk_dirname = get(g:, "virk_dirname", ".virkspace")
+let g:virk_cd_on_create = get(g:, "virk_cd_on_create", 1)
 let g:virk_settings_filename = get(g:, "virk_settings_filename", "virkspace.vim")
 let g:virk_vonce_filename = get(g:, "virk_vonce_filename", "virkvonce.vim")
 let g:virk_session_filename = get(g:, "virk_session_filename", "session.vim")
@@ -26,7 +27,7 @@ let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
 
 let s:virk_settings_dir = ""
 
-set ssop+=resize,winpos,winsize,blank,folds
+set ssop+=resize,winpos,winsize,folds
 
 function! s:findSettingsDir(dirname) abort
   if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
@@ -77,14 +78,18 @@ function! VSSetPWD()
 endfunction
 command! -nargs=0 VSSetPWD call VSSetPWD()
 
-function! VSSetOnce()
+function! VSSetVonce()
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
   if filereadable(l:fn)
-    echom 111
     exec "source " . l:fn
   endif
+  " let buffers = filter(range(1, bufnr('$')), 
+  "       \ 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
+  " if ! empty(buffers)
+  "   exe 'bw ' . join(buffers, ' ')
+  " endif
 endfunction
-command! -nargs=0 VSSetOnce call VSSetOnce()
+command! -nargs=0 VSSetVonce call VSSetVonce()
 
 function! VSSetVirkDir() abort
   let l:curDir = expand("%:p:h")
@@ -106,7 +111,7 @@ function! VSLoadVirkSpace()
   if g:virk_source_session
     call VSSetSession()
   endif
-  call VSSetOnce()
+  call VSSetVonce()
   call VSSetSettings()
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
 endfunction
@@ -133,15 +138,16 @@ function! VSCreateVirkSpace() abort
   endif
   call mkdir(l:projDir . "/" . g:virk_dirname)
   echom "[VirkSpaces] Project directory created"
-  if s:yesno("CD to project directory parent?")
-    return
-    cd `=l:projDir`
+  if g:virk_cd_on_create == 0
+    if s:yesno("CD to project directory parent?")
+      return
+    endif
   endif
+  cd `=l:projDir`
 endfunction
 command! -nargs=0 VSCreateVirkSpace call VSCreateVirkSpace()
 
 function! VSMakeSession()
-  echom s:virk_settings_dir . "/" . g:virk_session_filename
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
 endfunction
 command! -nargs=0 VSMakeSession call VSMakeSession()
@@ -173,7 +179,7 @@ function! VSMakeSessionOnLeave()
   endif
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     tabdo NERDTreeClose
-    call VSVonceWrite("NERDTree | wincmd l")
+    call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l")
   endif
   call VSMakeSession()
 endfunction
