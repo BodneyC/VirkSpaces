@@ -14,23 +14,23 @@
 "              --`-'                       `--`  `--'     `-'   ---'
 "
 "
-let g:virk_enable = get(g:, "virk_enable", 1)
-let g:virk_dirname = get(g:, "virk_dirname", ".virkspace")
-let g:virk_cd_on_create = get(g:, "virk_cd_on_create", 1)
-let g:virk_settings_filename = get(g:, "virk_settings_filename", "virkspace.vim")
-let g:virk_vonce_filename = get(g:, "virk_vonce_filename", "virkvonce.vim")
-let g:virk_session_filename = get(g:, "virk_session_filename", "session.vim")
-let g:virk_tags_filename = get(g:, "virk_tags_filename", "tags")
-let g:virk_coc_filename = get(g:, "virk_coc_filename", "coc-settings.json")
-let g:virk_coc_settings_enable = get(g:, "virk_coc_settings_enable", 1)
-let g:virk_source_session = get(g:, "virk_source_session", 1)
-let g:virk_tags_cmd = get(g:, "virk_tags_cmd", "ctags -Rf")
+let g:virk_enable                = get(g:, "virk_enable", 1)
+let g:virk_dirname               = get(g:, "virk_dirname", ".virkspace")
+let g:virk_cd_on_create          = get(g:, "virk_cd_on_create", 1)
+let g:virk_settings_filename     = get(g:, "virk_settings_filename", "virkspace.vim")
+let g:virk_vonce_filename        = get(g:, "virk_vonce_filename", "virkvonce.vim")
+let g:virk_session_filename      = get(g:, "virk_session_filename", "session.vim")
+let g:virk_tags_filename         = get(g:, "virk_tags_filename", "tags")
+let g:virk_coc_filename          = get(g:, "virk_coc_filename", "coc-settings.json")
+let g:virk_coc_settings_enable   = get(g:, "virk_coc_settings_enable", 1)
+let g:virk_source_session        = get(g:, "virk_source_session", 1)
+let g:virk_tags_cmd              = get(g:, "virk_tags_cmd", "ctags -Rf")
 let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
 
-let s:virk_settings_dir = ""
-let s:virk_root_dir = ""
+let s:virk_settings_dir          = ""
+let s:virk_root_dir              = ""
 
-" set ssop+=resize,winpos,winsize,folds
+set ssop+=resize,winpos,winsize,folds
 
 function! s:findSettingsDir(dirname) abort
   if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
@@ -291,7 +291,7 @@ command! -nargs=0 VSInfo call VSInfo()
 
 """""""" Automation augroup
 
-augroup project-vim
+augroup virk-spaces
   autocmd!
   autocmd VimEnter * nested if g:virk_enable
         \ |   call VSLoadVirkSpace()
