@@ -15,7 +15,9 @@ Or install with your favourite plugin manager:
 
 ### Usage
 
-Everything you need to knoow is documented in the help file (`./doc/virkspaces.txt`).
+VirkSpaces will only set up project dicrectories if no argument is given to `*vim`, this is to prevent calling a non-virkspace file from a virkspace directory and being dumped into the wrong space.
+
+Everything you need to know is documented in the help file (`./doc/virkspaces.txt`).
 
     :h virkspaces
 

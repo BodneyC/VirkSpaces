@@ -1,1 +1,1 @@
-NERDTree | wincmd l
+NERDTree | setlocal nobuflisted | wincmd l

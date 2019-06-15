@@ -83,11 +83,6 @@ function! VSSetVonce()
   if filereadable(l:fn)
     exec "source " . l:fn
   endif
-  " let buffers = filter(range(1, bufnr('$')), 
-  "       \ 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")')
-  " if ! empty(buffers)
-  "   exe 'bw ' . join(buffers, ' ')
-  " endif
 endfunction
 command! -nargs=0 VSSetVonce call VSSetVonce()
 
@@ -230,7 +225,7 @@ command! -nargs=0 VSVirkSpaceInfo call VSVirkSpaceInfo()
 
 augroup project-vim
   autocmd!
-  autocmd VimEnter * nested if g:virk_enable
+  autocmd VimEnter * nested if g:virk_enable && argc() == 0
         \ |   call VSLoadVirkSpace()
         \ | endif
   autocmd BufEnter * if g:virk_enable

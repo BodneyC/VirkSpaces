@@ -160,7 +160,7 @@ AUTOCMDS                                                *VirkSpaceAutoCmds*
 
 Much of this is automated through |autcmd|s:
 
-  - |VSLoadVirkSpace| is called on |VimEnter|,
+  - |VSLoadVirkSpace| is called on |VimEnter|, if `argc() < 2`
 
   - |VSSetSettings| is called on |BufEnter| as there are likely to be buffer
     specific settings.
