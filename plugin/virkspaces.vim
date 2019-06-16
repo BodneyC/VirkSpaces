@@ -48,7 +48,6 @@ function! s:findSettingsDir(dirname) abort
 endfunction
 
 function! VSSourceSettings()
-  let b:coc_root_patterns = g:virk_dirname
   let l:fn = s:virk_settings_dir . "/" . g:virk_settings_filename
   if filereadable(l:fn) && buflisted(bufnr("%"))
     exec "source " . l:fn
