@@ -26,9 +26,9 @@ let g:virk_coc_settings_enable   = get(g:, "virk_coc_settings_enable", 1)
 let g:virk_source_session        = get(g:, "virk_source_session", 1)
 let g:virk_tags_cmd              = get(g:, "virk_tags_cmd", "ctags -Rf")
 let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
+let g:virk_root_dir              = ""
 
 let s:virk_settings_dir          = ""
-let s:virk_root_dir              = ""
 
 set ssop+=resize,winpos,winsize,folds
 
@@ -38,7 +38,7 @@ function! s:findSettingsDir(dirname) abort
   endif
   let l:settingsDir = a:dirname . "/" . g:virk_dirname
   if isdirectory(l:settingsDir)
-    let s:virk_root_dir = a:dirname
+    let g:virk_root_dir = a:dirname
     return l:settingsDir
   endif
   let l:parentDir = strpart(a:dirname, 0, strridx(a:dirname, "/"))
@@ -78,7 +78,7 @@ endfunction
 command! -nargs=0 VSSetTags call VSSetTags()
 
 function! VSChangePWD()
-  cd `=s:virk_root_dir`
+  cd `=g:virk_root_dir`
 endfunction
 command! -nargs=0 VSChangePWD call VSChangePWD()
 
@@ -190,7 +190,7 @@ command! -nargs=0 VSMakeVirkSpace call VSMakeVirkSpace()
 
 function! VSMakeTagsFile()
   let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
-  exec "!" . g:virk_tags_cmd . " " . l:fn . " " . s:virk_root_dir
+  exec "!" . g:virk_tags_cmd . " " . l:fn . " " . g:virk_root_dir
   exec "set tags=" . l:fn
 endfunction
 command! -nargs=0 VSMakeTagsFile call VSMakeTagsFile()
