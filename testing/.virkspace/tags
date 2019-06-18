@@ -9,7 +9,7 @@ Fish	/home/benjc/Documents/virkspaces-vim/testing/test.py	/^class Fish:$/;"	c
 SessionLoad	/home/benjc/Documents/virkspaces-vim/testing/.virkspace/session.vim	/^let SessionLoad = 1$/;"	v
 __init__	/home/benjc/Documents/virkspaces-vim/testing/test.py	/^    def __init__(self, args):$/;"	m	class:Fish
 main	/home/benjc/Documents/virkspaces-vim/testing/test.py	/^def main():$/;"	f
-s:l	/home/benjc/Documents/virkspaces-vim/testing/.virkspace/session.vim	/^let s:l = 1 - ((0 * winheight(0) + 28) \/ 57)$/;"	v
+s:l	/home/benjc/Documents/virkspaces-vim/testing/.virkspace/session.vim	/^let s:l = 6 - ((5 * winheight(0) + 28) \/ 57)$/;"	v
 s:so_save	/home/benjc/Documents/virkspaces-vim/testing/.virkspace/session.vim	/^let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0$/;"	v
 s:sx	/home/benjc/Documents/virkspaces-vim/testing/.virkspace/session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v
 s:wipebuf	/home/benjc/Documents/virkspaces-vim/testing/.virkspace/session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v

@@ -30,11 +30,9 @@ let g:virk_root_dir              = ""
 
 let s:virk_settings_dir          = ""
 
-set ssop+=resize,winpos,winsize,folds
-
 function! s:findSettingsDir(dirname) abort
   if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
-    return "None"
+    return ""
   endif
   let l:settingsDir = a:dirname . "/" . g:virk_dirname
   if isdirectory(l:settingsDir)
@@ -92,9 +90,6 @@ command! -nargs=0 VSSourceVonce call VSSourceVonce()
 function! VSFindVirkDir() abort
   let l:curDir = expand("%:p:h")
   let s:virk_settings_dir = s:findSettingsDir(l:curDir)
-  if s:virk_settings_dir == "None"
-    return
-  endif
 endfunction
 command! -nargs=0 VSFindVirkDir call VSFindVirkDir()
 
@@ -184,6 +179,7 @@ function! VSMakeVirkSpace() abort
     endif
   endif
   cd `=l:projDir`
+  call VSMakeTagsFile()
 endfunction
 command! -nargs=0 VSMakeVirkSpace call VSMakeVirkSpace()
 
@@ -195,7 +191,10 @@ endfunction
 command! -nargs=0 VSMakeTagsFile call VSMakeTagsFile()
 
 function! VSMakeSession()
+  let sessionoptions = &sessionoptions
+  set sessionoptions+=resize,winpos,winsize,folds,tabpages sessionoptions-=blank,options
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
+  let &sessionoptions = sessionoptions
 endfunction
 command! -nargs=0 VSMakeSession call VSMakeSession()
 
@@ -213,7 +212,7 @@ function! VSVonceWrite(cmd, odr)
   endfor
   echom l:vonce
   if a:odr
-    call reverse(add(reverse(l:vonce), a:cmd))
+    call insert(l:vonce, a:cmd, 0)
   else
     call add(l:vonce, a:cmd)
   endif
