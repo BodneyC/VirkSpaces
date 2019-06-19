@@ -24,8 +24,11 @@ let g:virk_tags_filename         = get(g:, "virk_tags_filename", "tags")
 let g:virk_coc_filename          = get(g:, "virk_coc_filename", "coc-settings.json")
 let g:virk_coc_settings_enable   = get(g:, "virk_coc_settings_enable", 1)
 let g:virk_source_session        = get(g:, "virk_source_session", 1)
-let g:virk_tags_cmd              = get(g:, "virk_tags_cmd", "ctags -Rf")
+let g:virk_tags_bin              = get(g:, "virk_tags_bin", "ctags")
+let g:virk_tags_flags            = get(g:, "virk_tags_flags", "-Raf")
+let g:virk_tags_excludes         = get(g:, "virk_tags_excludes", [g:virk_dirname])
 let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
+
 let g:virk_root_dir              = ""
 
 let s:virk_settings_dir          = ""
@@ -60,9 +63,6 @@ function! VSSourceSession()
   endif
   exec "source " . l:fn
   let l:fn = g:virk_dirname . "/" . g:virk_session_filename
-  if bufnr(l:fn)
-    " exec "bd " . l:fn
-  endif
 endfunction
 command! -nargs=0 VSSourceSession call VSSourceSession()
 
@@ -154,7 +154,7 @@ function! VSCleanVirkSpace() abort
 endfunction
 command! -nargs=0 VSCleanVirkSpace call VSCleanVirkSpace()
 
-function! VSMakeVirkSpace() abort
+function! VSCreateVirkSpace() abort
   let l:projDir = input("Dir: ", expand("%:p:h"))
   if ! isdirectory(l:projDir)
     if ! s:yesno("\"" . l:projDir . "\" is not a directory, make dirs?")
@@ -178,15 +178,18 @@ function! VSMakeVirkSpace() abort
       return
     endif
   endif
-  cd `=l:projDir`
-  call VSMakeTagsFile()
+  call VSLoadVirkSpace()
 endfunction
-command! -nargs=0 VSMakeVirkSpace call VSMakeVirkSpace()
+command! -nargs=0 VSCreateVirkSpace call VSCreateVirkSpace()
 
 function! VSMakeTagsFile()
   let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
-  exec "!" . g:virk_tags_cmd . " " . l:fn . " " . g:virk_root_dir
+  let l:exc = ""
+  for exclude in g:virk_tags_excludes
+    let l:exc .= "--exclude=" . exclude . " "
+  endfor
   exec "set tags=" . l:fn
+  exec "!" . g:virk_tags_bin . " " . g:virk_tags_flags . " " . l:fn . " " . l:exc . " " . g:virk_root_dir
 endfunction
 command! -nargs=0 VSMakeTagsFile call VSMakeTagsFile()
 
@@ -210,11 +213,10 @@ function! VSVonceWrite(cmd, odr)
       return
     endif
   endfor
-  echom l:vonce
   if a:odr
-    call insert(l:vonce, a:cmd, 0)
-  else
     call add(l:vonce, a:cmd)
+  else
+    call insert(l:vonce, a:cmd, 0)
   endif
   call writefile(l:vonce, l:fn)
 endfunction
@@ -226,11 +228,15 @@ function! VSMakeSessionOnLeave()
   endif
   if bufwinnr("__vista__") != -1
     tabdo Vista!
-    call VSVonceWrite("Vista!! | Vista!! | wincmd h", 1)
+    call VSVonceWrite("Vista!! | Vista!! | wincmd h", 0)
+  endif
+  if bufwinnr("__Tagbar__.1") != -1
+    tabdo TagbarClose
+    call VSVonceWrite("TagbarOpen", 1)
   endif
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     tabdo NERDTreeClose
-    call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l", 0)
+    call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l", 1)
   endif
   call VSMakeSession()
 endfunction
