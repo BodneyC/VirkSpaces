@@ -3,6 +3,8 @@ VirkSpaces
 
 Fairly minimal workspace setup for Vims of all kinds.
 
+More can be read/seen about this plugin [here](https://benjc.me/blog/2019/06/20/virk-spaces.html).
+
 ### Installation
 
 Either add to rtp:

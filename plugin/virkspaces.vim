@@ -195,7 +195,7 @@ command! -nargs=0 VSMakeTagsFile call VSMakeTagsFile()
 
 function! VSMakeSession()
   let sessionoptions = &sessionoptions
-  set sessionoptions+=resize,winpos,winsize,folds,tabpages sessionoptions-=blank,options
+  set sessionoptions+=resize,winpos,winsize,folds sessionoptions-=blank,options
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
   let &sessionoptions = sessionoptions
 endfunction
@@ -222,6 +222,20 @@ function! VSVonceWrite(cmd, odr)
 endfunction
 command! -nargs=1 VSVonceWrite call VSVonceWrite(<f-args>)
 
+function! VSVonceRemove(cmd)
+  let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
+  if ! filereadable(l:fn)
+    return
+  endif
+  let l:vonce = readfile(l:fn)
+  let l:idx = index(l:vonce, a:cmd)
+  if l:idx == -1
+    return
+  endif
+  call remove(l:vonce, l:idx)
+  call writefile(l:vonce, l:fn)
+endfunction
+
 function! VSMakeSessionOnLeave()
   if s:virk_settings_dir == "0"
     return
@@ -229,14 +243,20 @@ function! VSMakeSessionOnLeave()
   if bufwinnr("__vista__") != -1
     tabdo Vista!
     call VSVonceWrite("Vista!! | Vista!! | wincmd h", 0)
+  else
+    call VSVonceRemove("Vista!! | Vista!! | wincmd h")
   endif
   if bufwinnr("__Tagbar__.1") != -1
     tabdo TagbarClose
     call VSVonceWrite("TagbarOpen", 1)
+  else
+    call VSVonceRemove("TagbarOpen")
   endif
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     tabdo NERDTreeClose
     call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l", 1)
+  else
+    call VSVonceRemove("NERDTree | setlocal nobuflisted | wincmd l")
   endif
   call VSMakeSession()
 endfunction
