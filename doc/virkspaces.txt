@@ -36,7 +36,7 @@ USAGE                                                       *VirkSpaceUsage*
 
 
 This section will define the usage of the plugin, the main function is 
- |VSMakeVirkSpace|, after that, the |autocmd| commands should do the rest.
+ |VSCreateVirkSpace|, after that, the |autocmd| commands should do the rest.
 
 
 --------------------------------------------------------------------------
@@ -44,7 +44,7 @@ FUNCTIONS                                               *VirkSpaceFunctions*
 
 Most of the functionality is accomplished through the plugins functions:
 
-  *VSMakeVirkSpace*         Params: None
+  *VSCreateVirkSpace*         Params: None
   
                             Desc: Used to create a |VirkSpace|, cwd is 
                                   prompted and the user can erase or 
@@ -132,6 +132,14 @@ Most of the functionality is accomplished through the plugins functions:
                                   match).
 
   
+  *VSVonceRemove*             Params:
+                              `cmd`   - String to write to 
+                                       |g:virk_vonce_filename|
+  
+                            Desc: Remove `cmd` from |g:virk_vonce_filename|
+                                  if present.
+
+  
   *VSMakeSessionOnLeave*      Params: None
   
                             Desc: Closes NERDTree and Vista (only these 
@@ -169,7 +177,7 @@ All commands are taken directly from the functions above, with the same
 
   |VSCleanVirkSpace|
 
-  |VSMakeVirkSpace|
+  |VSCreateVirkSpace|
 
   |VSMakeTagsFile|
 
@@ -243,13 +251,25 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
   *g:virk_tags_filename*             Default: `tags`
   
                                    Desc: Specifies filename for tags file.
+
+
+  *g:virk_tags_bin*                  Default `ctags`
+
+                                   Desc: Specifies the binary used to
+                                         generate |g:virk_tags_filename|
+
   
+  *g:virk_tags_flags*                Default `-Raf`
 
-  *g:virk_tags_cmd*                  Default `ctags -Rf`
+                                   Desc: Specifies the flags to give to
+                                         |g:virk_tags_bin|
 
-                                   Desc: Specified the partial command
-                                         to generate |g:virk_tags_filename|
-                                         NOTE: May need fine tuning
+  
+  *g:virk_tags_excludes*                Default `[ |g:virk_dirname| ]`
+
+                                   Desc: Specifies directory or filenames
+                                         to exclude from tag generation
+
   
   *g:virk_coc_settings_enable*       Default: `1`
   
@@ -257,16 +277,19 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
                                          should be sources from the 
                                          |VirkSpace|.
 
+
   *g:virk_coc_filename*              Default: `coc-settings.json`
 
                                    Desc: Specifies the filename in which to
                                          find CoC settings.
+
   
   *g:virk_source_session*            Default: `1`
   
                                    Desc: Specifies whether to source
                                          |g:virk_session_filename| by 
                                          default.
+
   
   *g:virk_make_session_on_leave*     Default: 1
   
