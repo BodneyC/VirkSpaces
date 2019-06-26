@@ -7,16 +7,11 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +6 test.py
-badd +22 .virkspace/session.vim
-badd +1 .virkspace/virkvonce.vim
-badd +1 /tmp/nvim3lEuOj/3
-badd +1 /tmp/nvimMP0ze2/3
-badd +1 /tmp/nvimumkDU0/3
-badd +0 /tmp/nvim3vrGgz/3
+badd +1 test.py
 argglobal
 silent! argdel *
-edit /tmp/nvimumkDU0/3
+set lines=57 columns=174
+edit test.py
 set splitbelow splitright
 wincmd t
 set winminheight=0
@@ -32,12 +27,12 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal nofen
-let s:l = 1 - ((0 * winheight(0) + 28) / 57)
+let s:l = 9 - ((8 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+9
+normal! 05|
 tabnext 1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

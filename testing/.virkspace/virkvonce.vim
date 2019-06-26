@@ -1,1 +1,1 @@
-NERDTree | setlocal nobuflisted | wincmd l
+NERDTreeProjectLoad /home/benjc/Documents/virkspaces-vim/testing

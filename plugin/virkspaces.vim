@@ -236,6 +236,11 @@ function! VSVonceRemove(cmd)
   call writefile(l:vonce, l:fn)
 endfunction
 
+function VSNerdTreeSave()
+  NERDTreeFocus
+  exec 'NERDTreeProjectSave ' . g:virk_root_dir
+endfunction
+
 function! VSMakeSessionOnLeave()
   if s:virk_settings_dir == "0"
     return
@@ -253,10 +258,11 @@ function! VSMakeSessionOnLeave()
     call VSVonceRemove("TagbarOpen")
   endif
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
+    call VSNerdTreeSave()
     tabdo NERDTreeClose
-    call VSVonceWrite("NERDTree | setlocal nobuflisted | wincmd l", 1)
+    call VSVonceWrite("NERDTreeProjectLoad " . g:virk_root_dir, 1)
   else
-    call VSVonceRemove("NERDTree | setlocal nobuflisted | wincmd l")
+    call VSVonceRemove("NERDTreeProjectLoad " . g:virk_root_dir, 1)
   endif
   call VSMakeSession()
 endfunction
