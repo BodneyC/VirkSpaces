@@ -260,9 +260,9 @@ function! VSMakeSessionOnLeave()
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     call VSNerdTreeSave()
     tabdo NERDTreeClose
-    call VSVonceWrite("NERDTreeProjectLoad " . g:virk_root_dir, 1)
+    call VSVonceWrite("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir, 1)
   else
-    call VSVonceRemove("NERDTreeProjectLoad " . g:virk_root_dir, 1)
+    call VSVonceRemove("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir, 1)
   endif
   call VSMakeSession()
 endfunction
