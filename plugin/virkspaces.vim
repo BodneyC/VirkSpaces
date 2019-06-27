@@ -262,8 +262,9 @@ function! VSMakeSessionOnLeave()
     tabdo NERDTreeClose
     call VSVonceWrite("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir, 1)
   else
-    call VSVonceRemove("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir, 1)
+    call VSVonceRemove("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir)
   endif
+  echom "Lemon"
   call VSMakeSession()
 endfunction
 command! -nargs=0 VSMakeSessionOnLeave call VSMakeSessionOnLeave()
