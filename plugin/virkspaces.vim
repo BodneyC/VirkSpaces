@@ -107,6 +107,9 @@ endfunction
 command! -nargs=0 VSCoCSettings call VSCoCSettings()
 
 function! VSLoadVirkSpace()
+  if argc() > 0
+    let l:first = argv()[0]
+  endif
   call VSFindVirkDir() 
   if s:virk_settings_dir == "0"
     echom "[VirkSpaces] No virkspace found"
@@ -119,6 +122,11 @@ function! VSLoadVirkSpace()
   endif
   if g:virk_coc_settings_enable != 0
     call VSCoCSettings()
+  endif
+  if argc() > 0
+    if ! isdirectory(l:first)
+      exec 'b ' . l:first
+    endif
   endif
   call VSSourceVonce()
   call VSSourceSettings()
@@ -236,9 +244,17 @@ function! VSVonceRemove(cmd)
   call writefile(l:vonce, l:fn)
 endfunction
 
-function VSNerdTreeSave()
+function! VSNerdTreeSave()
   NERDTreeFocus
   exec 'NERDTreeProjectSave ' . g:virk_root_dir
+endfunction
+
+function! s:delDirBuffers()
+  for i in map(copy(getbufinfo()), 'v:val.bufnr')
+    if isdirectory(buffer_name(i))
+      exec 'bd ' . i
+    endif
+  endfor
 endfunction
 
 function! VSMakeSessionOnLeave()
@@ -264,6 +280,7 @@ function! VSMakeSessionOnLeave()
   else
     call VSVonceRemove("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir)
   endif
+  call s:delDirBuffers()
   echom "Lemon"
   call VSMakeSession()
 endfunction
@@ -315,8 +332,8 @@ function! VSInfo()
   else
     call writefile(["VirkSpace enabled: Disabled"], l:tmpFile)
   endif
-	exec 'split ' . l:tmpFile
-	setl buftype=nofile bufhidden=wipe nobuflisted ro
+  exec 'split ' . l:tmpFile
+  setl buftype=nofile bufhidden=wipe nobuflisted ro
 endfunction
 command! -nargs=0 VSInfo call VSInfo()
 
