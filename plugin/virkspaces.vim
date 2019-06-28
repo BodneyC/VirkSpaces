@@ -114,7 +114,7 @@ function! VSLoadVirkSpace()
   endif
   call VSChangePWD()
   call VSSetTags()
-  if g:virk_source_session && argc() == 0
+  if g:virk_source_session
     call VSSourceSession()
   endif
   if g:virk_coc_settings_enable != 0
