@@ -123,7 +123,7 @@ function! VSLoadVirkSpace()
   if g:virk_coc_settings_enable != 0
     call VSCoCSettings()
   endif
-  if argc() > 0
+  if exists("l:first")
     if ! isdirectory(l:first)
       exec 'b ' . l:first
     endif
