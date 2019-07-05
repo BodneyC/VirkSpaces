@@ -28,6 +28,7 @@ let g:virk_tags_bin              = get(g:, "virk_tags_bin", "ctags")
 let g:virk_tags_flags            = get(g:, "virk_tags_flags", "-Raf")
 let g:virk_tags_excludes         = get(g:, "virk_tags_excludes", [g:virk_dirname])
 let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
+let g:virk_update_on_leave       = get(g:, "virk_update_on_leave", 1)
 
 let g:virk_root_dir              = ""
 
@@ -257,34 +258,38 @@ function! s:delDirBuffers()
   endfor
 endfunction
 
-function! VSMakeSessionOnLeave()
+function! VSUpdateOnLeave()
   if s:virk_settings_dir == "0"
     return
   endif
+  let l:vista_msg = "Vista!! | Vista!! | wincmd h"
   if bufwinnr("__vista__") != -1
     tabdo Vista!
-    call VSVonceWrite("Vista!! | Vista!! | wincmd h", 0)
+    call VSVonceWrite(l:vista_msg, 0)
   else
-    call VSVonceRemove("Vista!! | Vista!! | wincmd h")
+    call VSVonceRemove(l:vista_msg)
   endif
+  let l:tagbar_msg = "TagbarOpen"
   if bufwinnr("__Tagbar__.1") != -1
     tabdo TagbarClose
-    call VSVonceWrite("TagbarOpen", 1)
+    call VSVonceWrite(l:tagbar_msg, 1)
   else
-    call VSVonceRemove("TagbarOpen")
+    call VSVonceRemove(l:tagbar_msg)
   endif
+  let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     call VSNerdTreeSave()
     tabdo NERDTreeClose
-    call VSVonceWrite("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir, 1)
+    call VSVonceWrite(l:nt_msg, 1)
   else
-    call VSVonceRemove("NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir)
+    call VSVonceRemove(l:nt_msg)
   endif
   call s:delDirBuffers()
-  echom "Lemon"
-  call VSMakeSession()
+  if g:virk_make_session_on_leave
+    call VSMakeSession()
+  endif
 endfunction
-command! -nargs=0 VSMakeSessionOnLeave call VSMakeSessionOnLeave()
+command! -nargs=0 VSUpdateOnLeave call VSUpdateOnLeave()
 
 """""""" Helper functions
 
@@ -326,6 +331,7 @@ function! VSInfo()
           \   "VirkSpace vonce file    : " . s:vsFileExists(g:virk_vonce_filename),
           \   "VirkSpace session file  : " . s:vsFileExists(g:virk_session_filename),
           \   "VirkSpace tags file     : " . s:vsFileExists(g:virk_tags_filename),
+          \   "Update Vonce on leave   : " . s:booleanToString(g:virk_update_on_leave),
           \   "Make session on leave   : " . s:booleanToString(g:virk_make_session_on_leave),
           \   "Source CoC settings     : " . s:booleanToString(g:virk_coc_settings_enable)
           \ ], l:tmpFile)
@@ -347,7 +353,7 @@ augroup virk-spaces
   autocmd BufEnter * if g:virk_enable
         \ |   call VSSourceSettings()
         \ | endif
-  autocmd VimLeave * if g:virk_make_session_on_leave
-        \ |   call VSMakeSessionOnLeave()
+  autocmd VimLeave * if g:virk_update_on_leave
+        \ |   call VSUpdateOnLeave()
         \ | endif
 augroup END

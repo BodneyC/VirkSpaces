@@ -298,6 +298,13 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
                                          |VimLeave|
 
 
+  *g:virk_update_on_leave*           Default: 1
+  
+                                   Desc: Specifies whether to update
+                                         |g:virk_vonce_filename| on 
+                                         |VimLeave|
+
+
 ==========================================================================
 TODOS                                                       *VirkSpaceTODOs*
 
