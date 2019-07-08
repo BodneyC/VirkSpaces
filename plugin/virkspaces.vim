@@ -276,7 +276,7 @@ function! VSUpdateOnLeave()
   else
     call VSVonceRemove(l:tagbar_msg)
   endif
-  let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoad " . g:virk_root_dir
+  let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoadFromCWD"
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     call VSNerdTreeSave()
     tabdo NERDTreeClose
