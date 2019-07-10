@@ -246,7 +246,7 @@ function! VSVonceRemove(cmd)
 endfunction
 
 function! VSNerdTreeSave()
-  NERDTreeFocus
+  exec 'NERDTreeFocus'
   exec 'NERDTreeProjectSave ' . g:virk_root_dir
 endfunction
 
