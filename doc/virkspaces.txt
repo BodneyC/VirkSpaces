@@ -116,6 +116,16 @@ Most of the functionality is accomplished through the plugins functions:
                                   |g:virk_dirname|.
 
 
+  *VSMakeVirkFile*            Params: None
+
+                            Desc: Create |g:virk_settings_filename|
+
+  
+  *VSMakeVonceFile*           Params: None
+
+                            Desc: Create |g:virk_vonce_filename|
+
+  
   *VSMakeTagsFile*            Params: None
 
                             Desc: Create |g:virk_tags_filename|
@@ -182,6 +192,10 @@ All commands are taken directly from the functions above, with the same
   |VSMakeTagsFile|
 
   |VSMakeSession|
+
+  |VSMakeVirkFile|
+
+  |VSMakeVonceFile|
 
   |VSVonceWrite|
 

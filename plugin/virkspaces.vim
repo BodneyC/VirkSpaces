@@ -202,9 +202,23 @@ function! VSMakeTagsFile()
 endfunction
 command! -nargs=0 VSMakeTagsFile call VSMakeTagsFile()
 
+function! VSMakeVonceFile()
+  let l:vonce_file = s:virk_settings_dir . "/" . g:virk_vonce_filename
+  exec "e " . l:vonce_file
+  exec "au! BufWrite <buffer> so %"
+endfunction
+command! -nargs=0 VSMakeVonceFile call VSMakeVonceFile()
+
+function! VSMakeVirkFile()
+  let l:virk_file = s:virk_settings_dir . "/" . g:virk_settings_filename
+  exec "e " . l:virk_file
+  exec "au! BufWrite <buffer> so %"
+endfunction
+command! -nargs=0 VSMakeVirkFile call VSMakeVirkFile()
+
 function! VSMakeSession()
   let sessionoptions = &sessionoptions
-  set sessionoptions+=resize,winpos,winsize,folds sessionoptions-=blank,options
+  set sessionoptions+=winpos,winsize,folds sessionoptions-=blank,options,resize
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
   let &sessionoptions = sessionoptions
 endfunction
