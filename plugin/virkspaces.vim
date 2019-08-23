@@ -157,7 +157,7 @@ function! VSCreateVirkSpace() abort
     endif
   endif
   call VSLoadVirkSpace()
-  call s:vsEchomErrors()
+  call s:virk_error_report()
 endfunction
 command! -nargs=0 VSCreateVirkSpace call VSCreateVirkSpace()
 
@@ -310,6 +310,7 @@ function s:virk_error_report()
   for l:e in s:virk_errors
     echom '[VirkSpaces] ' . l:e
   endfor
+  let s:virk_errors = []
 endfunction
 
 " ------------- Core functions -------------
@@ -343,7 +344,7 @@ function! VSSourceAllSettings()
     try
       call VSSourceSession()
     catch /E344:/
-      s:virk_errors+=["[VirkSpaces] E344: Caused by broken session file"]
+      call add(s:virk_errors, "[VirkSpaces] E344: Caused by broken session file")
       call VSMakeSession()
     endtry
   endif
