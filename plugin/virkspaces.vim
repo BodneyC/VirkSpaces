@@ -188,7 +188,7 @@ command! -nargs=0 VSMakeVirkFile call VSMakeVirkFile()
 
 function! VSMakeSession()
   let sessionoptions = &sessionoptions
-  set sessionoptions+=winsize,winpos,folds sessionoptions-=blank,options,resize
+  set sessionoptions+=winsize,winpos sessionoptions-=blank,options,resize,fold
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
   let &sessionoptions = sessionoptions
 endfunction
@@ -246,7 +246,7 @@ endfunction
 
 function! VSUpdateOnLeave()
   if s:virk_settings_dir != "0"
-    let l:vista_msg = "Vista!! | Vista!! | wincmd h"
+    let l:vista_msg = "Vista!! | wincmd h"
     if bufwinnr("__vista__") != -1
       tabdo Vista!
       call VSVonceWrite(l:vista_msg, 0)
@@ -339,6 +339,7 @@ endfunction
 command! -nargs=0 VSInfo call VSInfo()
 
 function! VSSourceAllSettings()
+  call VSMakeTagsFile()
   " Catch broken session file to prevent erroring
   if g:virk_source_session
     try
@@ -366,13 +367,12 @@ function! VSLoadVirkSpace()
     return
   endif
   call VSChangePWD()
-  call VSMakeTagsFile()
+  call VSSourceAllSettings() " Sources session, must be before buffer change
   if exists("l:first")
     if ! isdirectory(l:first)
       exec 'b ' . l:first
     endif
   endif
-  call VSSourceAllSettings()
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
   call s:virk_error_report()
 endfunction
