@@ -24,6 +24,7 @@ let g:virk_tags_filename         = get(g:, "virk_tags_filename", "tags")
 let g:virk_coc_filename          = get(g:, "virk_coc_filename", "coc-settings.json")
 let g:virk_coc_settings_enable   = get(g:, "virk_coc_settings_enable", 1)
 let g:virk_source_session        = get(g:, "virk_source_session", 1)
+let g:virk_tags_enable           = get(g:, "virk_tags_enable", 1)
 let g:virk_tags_bin              = get(g:, "virk_tags_bin", "ctags")
 let g:virk_tags_flags            = get(g:, "virk_tags_flags", "-Rf")
 let g:virk_tags_excludes         = get(g:, "virk_tags_excludes", [g:virk_dirname])
@@ -188,7 +189,7 @@ command! -nargs=0 VSMakeVirkFile call VSMakeVirkFile()
 
 function! VSMakeSession()
   let sessionoptions = &sessionoptions
-  set sessionoptions+=winsize,winpos sessionoptions-=blank,options,resize,fold
+  set sessionoptions+=winsize,winpos sessionoptions-=blank,options,resize
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
   let &sessionoptions = sessionoptions
 endfunction
@@ -339,7 +340,9 @@ endfunction
 command! -nargs=0 VSInfo call VSInfo()
 
 function! VSSourceAllSettings()
-  call VSMakeTagsFile()
+  if g:virk_tags_enable
+    call VSMakeTagsFile()
+  endif
   " Catch broken session file to prevent erroring
   if g:virk_source_session
     try
