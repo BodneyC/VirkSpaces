@@ -15,6 +15,8 @@
 "
 "
 let g:virk_enable                = get(g:, "virk_enable", 1)
+let g:virk_ignore_enable         = get(g:, "virk_ignore_enable", 1)
+let g:virk_ignore_filename       = get(g:, "virk_ignore_filename", ".virkignore")
 let g:virk_dirname               = get(g:, "virk_dirname", ".virkspace")
 let g:virk_cd_on_create          = get(g:, "virk_cd_on_create", 1)
 let g:virk_settings_filename     = get(g:, "virk_settings_filename", "virkspace.vim")
