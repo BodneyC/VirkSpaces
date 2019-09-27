@@ -81,7 +81,11 @@ command! -nargs=0 VSCoCSettings call VSCoCSettings()
 
 function! s:findVirkDirRecursive(dirname) abort
   if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
-    return ""
+    return 0
+  endif
+  if g:virk_ignore_enable && filereadable(a:dirname . "/" . g:virk_ignore_filename)
+    echom "CATS"
+    return 0
   endif
   let l:settingsDir = a:dirname . "/" . g:virk_dirname
   if isdirectory(l:settingsDir)

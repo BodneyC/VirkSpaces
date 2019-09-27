@@ -246,6 +246,21 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
                                          look for.
                                    
   
+  *g:virk_ignore_enable*             Default: `1`
+  
+                                   Desc: Specifies whether not to load 
+                                         |virkspace| if 
+                                         |g:virk_ignore_filename| present 
+                                         in pwd
+  
+  
+  *g:virk_dirname*                   Default: `.virkspace`
+  
+                                   Desc: Specifies the name of the project
+                                         directory (the *VirkSpace* ) to 
+                                         look for.
+                                   
+  
   *g:virk_cd_on_create*              Default: `1`
 
                                    Desc: If not `0`, will cd to |VirkSpace|
