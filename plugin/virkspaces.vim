@@ -85,7 +85,7 @@ function! s:findVirkDirRecursive(dirname) abort
   endif
   if g:virk_ignore_enable && filereadable(a:dirname . "/" . g:virk_ignore_filename)
     echom "CATS"
-    return 0
+    return -1
   endif
   let l:settingsDir = a:dirname . "/" . g:virk_dirname
   if isdirectory(l:settingsDir)
@@ -354,7 +354,7 @@ function! VSSourceAllSettings()
     try
       call VSSourceSession()
     catch /E344:/
-      call add(s:virk_errors, "[VirkSpaces] E344: Caused by broken session file")
+      call add(s:virk_errors, "[VirkSpaces] E344: Caused by malformed session file")
       call VSMakeSession()
     endtry
   endif
@@ -371,7 +371,11 @@ function! VSLoadVirkSpace()
     let l:first = argv()[0]
   endif
   call VSFindVirkDir() 
-  if s:virk_settings_dir == "0"
+  if s:virk_settings_dir == -1
+    echom "[VirkSpaces] Found " . g:virk_ignore_filename
+    return
+  endif
+  if s:virk_settings_dir == 0
     echom "[VirkSpaces] No virkspace found"
     return
   endif
