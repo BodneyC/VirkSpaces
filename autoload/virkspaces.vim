@@ -347,7 +347,7 @@ function! virkspaces#vsloadvirkspace()
   call virkspaces#vschangepwd()
   call virkspaces#vssourceallsettings() " Sources session, must be before buffer change
   if exists("l:first")
-    if ! isdirectory(l:first) && filereadable(l:first)
+    if ! isdirectory(l:first)
       exec 'b ' . l:first
     endif
   endif
