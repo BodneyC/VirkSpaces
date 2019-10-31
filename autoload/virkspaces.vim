@@ -332,6 +332,9 @@ function! virkspaces#vsloadvirkspace()
   if argc() > 0
     let l:first = argv()[0]
   endif
+  if exists(l:first) && isdirectory(l:first)
+    exec 'cd ' . l:first
+  endif
   call virkspaces#vsfindvirkdir() 
   if s:virk_settings_dir == "1"
     echom "[VirkSpaces] Found " . g:virk_ignore_filename
@@ -343,10 +346,8 @@ function! virkspaces#vsloadvirkspace()
   endif
   call virkspaces#vschangepwd()
   call virkspaces#vssourceallsettings() " Sources session, must be before buffer change
-  if exists("l:first")
-    if ! isdirectory(l:first)
+  if exists("l:first") && ! isdirectory(l:first)
       exec 'b ' . l:first
-    endif
   endif
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
   call s:virk_error_report()
