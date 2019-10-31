@@ -345,8 +345,8 @@ function! virkspaces#vsloadvirkspace()
     return
   endif
   call virkspaces#vschangepwd()
-  call virkspaces#vssourceallsettings() " Sources session, must be before buffer change
-  if exists("l:first") && ! isdirectory(l:first)
+  call virkspaces#vssourceallsettings()
+  if exists("l:first") && bufwinnr(l:first) != -1
       exec 'b ' . l:first
   endif
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
