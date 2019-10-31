@@ -332,7 +332,7 @@ function! virkspaces#vsloadvirkspace()
   if argc() > 0
     let l:first = argv()[0]
   endif
-  if exists(l:first) && isdirectory(l:first)
+  if exists("l:first") && isdirectory(l:first)
     exec 'cd ' . l:first
   endif
   call virkspaces#vsfindvirkdir() 
