@@ -50,10 +50,10 @@ command! -nargs=0 VSMakeVonceFile      call virkspaces#vsmakevoncefile()
 command! -nargs=0 VSMakeVirkFile       call virkspaces#vsmakevirkfile()
 command! -nargs=0 VSMakeSession        call virkspaces#vsmakesession()
 command! -nargs=1 VSVonceWrite         call virkspaces#vsvoncewrite(<f-args>)
-command! -nargs=0 VSUpdateOnLeave      call virkspaces#VSUpdateOnLeave()
-command! -nargs=0 VSInfo               call virkspaces#VSInfo()
-command! -nargs=0 VSSourceAllSettings  call virkspaces#VSSourceAllSettings
-command! -nargs=0 VSLoadVirkSpace      call virkspaces#VSLoadVirkSpace()
+command! -nargs=0 VSUpdateOnLeave      call virkspaces#vsupdateonleave()
+command! -nargs=0 VSInfo               call virkspaces#vsinfo()
+command! -nargs=0 VSSourceAllSettings  call virkspaces#vssourceallsettings()
+command! -nargs=0 VSLoadVirkSpace      call virkspaces#vsloadvirkspace()
 
 " ------------- Automation AuGroups -------------
 
