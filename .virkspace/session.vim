@@ -7,8 +7,8 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
+badd +355 autoload/virkspaces.vim
 badd +36 plugin/virkspaces.vim
-badd +349 autoload/virkspaces.vim
 argglobal
 %argdel
 edit autoload/virkspaces.vim
@@ -28,12 +28,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal nofen
 silent! normal! zE
-let s:l = 349 - ((50 * winheight(0) + 29) / 59)
+let s:l = 352 - ((40 * winheight(0) + 29) / 59)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-349
-normal! 047|
+352
+normal! 05|
 tabnext 1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

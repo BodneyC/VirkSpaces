@@ -73,7 +73,7 @@ function! s:findVirkDirRecursive(dirname) abort
 endfunction
 
 function! virkspaces#vsfindvirkdir() abort
-  let l:curDir = expand("%:p:h")
+  let l:curDir = getcwd()
   let s:virk_settings_dir = s:findVirkDirRecursive(l:curDir)
 endfunction
 
@@ -345,9 +345,11 @@ function! virkspaces#vsloadvirkspace()
     return
   endif
   call virkspaces#vschangepwd()
-  call virkspaces#vssourceallsettings()
-  if exists("l:first") && filereadable(l:first)
+  call virkspaces#vssourceallsettings() " Sources session, must be before buffer change
+  if exists("l:first")
+    if ! isdirectory(l:first) && filereadable(l:first)
       exec 'b ' . l:first
+    endif
   endif
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
   call s:virk_error_report()
