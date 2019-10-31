@@ -346,7 +346,7 @@ function! virkspaces#vsloadvirkspace()
   endif
   call virkspaces#vschangepwd()
   call virkspaces#vssourceallsettings()
-  if exists("l:first") && bufwinnr(l:first) != -1
+  if exists("l:first") && filereadable(l:first)
       exec 'b ' . l:first
   endif
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
