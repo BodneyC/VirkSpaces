@@ -220,12 +220,21 @@ function! s:close_others()
   let dict = { 
         \   "__Tagbar__.1": "TagbarOpen",
         \   "__vista__": "Vista!! | wincmd h",
-        \   "coc-explorer": "CocCommand explorer --toggle" 
+        \   "\\[coc-explorer\\]": "CocCommand explorer --toggle" 
         \ }
   for [k, v] in items(dict)
     let winnr = bufwinnr(k)
     if winnr != -1
       exec winnr . "wincmd q"
+      let bufnr = 0
+      while bufnr != -1
+        let bufnr = bufnr(k)
+        try
+          exec "bd!" . bufnr
+        catch E516
+          let bufnr = -1
+        endtry
+      endwhile
       call virkspaces#vsvoncewrite(v, 1)
     else
       call virkspaces#vsvonceremove(v)
@@ -255,10 +264,10 @@ endfunction
 
 function! virkspaces#vsupdateonleave()
   if s:virk_settings_dir != "0"
-    call s:close_nerdtree()
+    " call s:close_nerdtree()
     call s:close_others()
-    call s:close_terminals()
-    call s:delDirBuffers()
+    " call s:close_terminals()
+    " call s:delDirBuffers()
     if g:virk_make_session_on_leave
       call virkspaces#vsmakesession()
     endif
