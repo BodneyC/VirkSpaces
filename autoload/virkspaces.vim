@@ -264,10 +264,10 @@ endfunction
 
 function! virkspaces#vsupdateonleave()
   if s:virk_settings_dir != "0"
-    " call s:close_nerdtree()
+    call s:close_nerdtree()
     call s:close_others()
-    " call s:close_terminals()
-    " call s:delDirBuffers()
+    call s:close_terminals()
+    call s:delDirBuffers()
     if g:virk_make_session_on_leave
       call virkspaces#vsmakesession()
     endif
