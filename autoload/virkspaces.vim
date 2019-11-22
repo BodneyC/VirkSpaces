@@ -47,7 +47,7 @@ function! virkspaces#vscocsettings()
     let true = 1
     let json = eval(join(readfile(l:fn)))
     for [k, v] in items(json)
-      exec "call coc#config('" . k . "', " . v . ")"
+      exec "call coc#config("" . k . "", " . v . ")"
     endfor
   endif
 endfunction
@@ -204,42 +204,60 @@ function! virkspaces#vsvonceremove(cmd)
 endfunction
 
 function! virkspaces#vsnerdtreesave()
-  exec 'NERDTreeFocus'
-  exec 'NERDTreeProjectSave ' . g:virk_root_dir
+  exec "NERDTreeFocus"
+  exec "NERDTreeProjectSave " . g:virk_root_dir
 endfunction
 
 function! s:delDirBuffers()
-  for i in map(copy(getbufinfo()), 'v:val.bufnr')
+  for i in map(copy(getbufinfo()), "v:val.bufnr")
     if isdirectory(buffer_name(i))
-      exec 'bd ' . i
+      exec "bd!" . i
+    endif
+  endfor
+endfunction
+
+function! s:close_others()
+  let dict = { 
+        \   "__Tagbar__.1": "TagbarOpen",
+        \   "__vista__": "Vista!! | wincmd h",
+        \   "coc-explorer": "CocCommand explorer --toggle" 
+        \ }
+  for [k, v] in items(dict)
+    let winnr = bufwinnr(k)
+    if winnr != -1
+      exec winnr . "wincmd q"
+      call virkspaces#vsvoncewrite(v, 1)
+    else
+      call virkspaces#vsvonceremove(v)
+    endif
+  endfor
+endfunction
+
+function! s:close_nerdtree()
+  let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoadFromCWD"
+  if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
+    call virkspaces#vsnerdtreesave()
+    tabdo NERDTreeClose
+    call virkspaces#vsvoncewrite(l:nt_msg, 1)
+  else
+    call virkspaces#vsvonceremove(l:nt_msg)
+  endif
+endfunction
+
+function s:close_terminals()
+  let buffers = filter(range(1, bufnr("$")), "bufexists(v:val)")
+  for b in buffers
+    if getbufvar(b, "&buftype", "ERROR") == "terminal"
+      exec "bd!" . b
     endif
   endfor
 endfunction
 
 function! virkspaces#vsupdateonleave()
   if s:virk_settings_dir != "0"
-    let l:vista_msg = "Vista!! | wincmd h"
-    if bufwinnr("__vista__") != -1
-      tabdo Vista!
-      call virkspaces#vsvoncewrite(l:vista_msg, 0)
-    else
-      call virkspaces#vsvonceremove(l:vista_msg)
-    endif
-    let l:tagbar_msg = "TagbarOpen"
-    if bufwinnr("__Tagbar__.1") != -1
-      tabdo TagbarClose
-      call virkspaces#vsvoncewrite(l:tagbar_msg, 1)
-    else
-      call virkspaces#vsvonceremove(l:tagbar_msg)
-    endif
-    let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoadFromCWD"
-    if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
-      call virkspaces#vsnerdtreesave()
-      tabdo NERDTreeClose
-      call virkspaces#vsvoncewrite(l:nt_msg, 1)
-    else
-      call virkspaces#vsvonceremove(l:nt_msg)
-    endif
+    call s:close_nerdtree()
+    call s:close_others()
+    call s:close_terminals()
     call s:delDirBuffers()
     if g:virk_make_session_on_leave
       call virkspaces#vsmakesession()
@@ -279,7 +297,7 @@ endfunction
 
 function s:virk_error_report()
   for l:e in s:virk_errors
-    echom '[VirkSpaces] ' . l:e
+    echom "[VirkSpaces] " . l:e
   endfor
   let s:virk_errors = []
 endfunction
@@ -299,12 +317,12 @@ function! virkspaces#vsinfo()
           \   "Update Vonce on leave   : " . s:boolean_to_string(g:virk_update_on_leave),
           \   "Make session on leave   : " . s:boolean_to_string(g:virk_make_session_on_leave),
           \   "Source CoC settings     : " . s:boolean_to_string(g:virk_coc_settings_enable),
-          \   "Errors                  : " . join(s:virk_errors, ',')
+          \   "Errors                  : " . join(s:virk_errors, ",")
           \ ], l:tmpFile)
   else
     call writefile(["VirkSpace enabled: Disabled"], l:tmpFile)
   endif
-  exec 'split ' . l:tmpFile
+  exec "split " . l:tmpFile
   setl buftype=nofile bufhidden=wipe nobuflisted ro
 endfunction
 
@@ -333,7 +351,7 @@ function! virkspaces#vsloadvirkspace()
     let l:first = argv()[0]
   endif
   if exists("l:first") && isdirectory(l:first)
-    exec 'cd ' . l:first
+    exec "cd " . l:first
   endif
   call virkspaces#vsfindvirkdir() 
   if s:virk_settings_dir == "1"
@@ -348,7 +366,7 @@ function! virkspaces#vsloadvirkspace()
   call virkspaces#vssourceallsettings() " Sources session, must be before buffer change
   if exists("l:first")
     if ! isdirectory(l:first)
-      exec 'b ' . l:first
+      exec "b " . l:first
     endif
   endif
   echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
