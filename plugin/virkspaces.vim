@@ -54,6 +54,8 @@ command! -nargs=0 VSUpdateOnLeave      call virkspaces#vsupdateonleave()
 command! -nargs=0 VSInfo               call virkspaces#vsinfo()
 command! -nargs=0 VSSourceAllSettings  call virkspaces#vssourceallsettings()
 command! -nargs=0 VSLoadVirkSpace      call virkspaces#vsloadvirkspace()
+command! -nargs=0 VirkCocCreate        call virkspaces#vscoccreate()
+
 
 " ------------- Automation AuGroups -------------
 

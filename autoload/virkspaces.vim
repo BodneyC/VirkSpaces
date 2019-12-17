@@ -138,6 +138,30 @@ function! virkspaces#vscreatevirkspace() abort
   call s:virk_error_report()
 endfunction
 
+" https://github.com/neoclide/coc.nvim/pull/1110/commits/3bf6e19ea
+function! virkspaces#vscoccreate()
+  let currentDir = getcwd()
+  let fsRootDir = fnamemodify($HOME, ":p:h:h:h")
+
+  if currentDir == $HOME
+    echom "Can't resolve local config from current working directory."
+    return
+  endif
+
+  while isdirectory(currentDir) && !(currentDir ==# $HOME) && !(currentDir ==# fsRootDir)
+    if isdirectory(currentDir.'/'.g:virk_dirname)
+      execute 'edit '.currentDir.'/'.g:virk_dirname.'/coc-settings.json'
+      return
+    endif
+    let currentDir = fnamemodify(currentDir, ':p:h:h')
+  endwhile
+
+  if coc#util#prompt_confirm("No local config detected, would you like to create ".g:virk_dirname."/coc-settings.json?")
+    call mkdir(g:virk_dirname, 'p')
+    execute 'edit 'g:virk_dirname."/coc-settings.json'
+  endif
+endfunction
+
 function! virkspaces#vsmaketagsfile()
   let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
   let l:exc = ""
