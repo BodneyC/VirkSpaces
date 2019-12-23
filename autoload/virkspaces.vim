@@ -40,18 +40,6 @@ function! virkspaces#virksourcevonce()
   endif
 endfunction
 
-function! virkspaces#virkcocsettings()
-  let l:fn = s:virk_settings_dir . "/" . g:virk_coc_filename
-  if filereadable(l:fn)
-    let false = 0
-    let true = 1
-    let json = eval(join(readfile(l:fn)))
-    for [k, v] in items(json)
-      exec "call coc#config("" . k . "", " . v . ")"
-    endfor
-  endif
-endfunction
-
 " ------------- Directory functions -------------
 
 function! s:findVirkDirRecursive(dirname) abort
@@ -93,7 +81,6 @@ function! virkspaces#virkcleanvirkspace() abort
         \   g:virk_session_filename, 
         \   g:virk_vonce_filename,
         \   g:virk_tags_filename, 
-        \   g:virk_coc_filename
         \ ]
     let l:fn = s:virk_settings_dir . "/" . l:fn
     if filereadable(l:fn) 
@@ -349,7 +336,6 @@ function! virkspaces#virkinfo()
           \   "VirkSpace tags file     : " . s:virk_file_exists(g:virk_tags_filename),
           \   "Update Vonce on leave   : " . s:boolean_to_string(g:virk_update_on_leave),
           \   "Make session on leave   : " . s:boolean_to_string(g:virk_make_session_on_leave),
-          \   "Source CoC settings     : " . s:boolean_to_string(g:virk_coc_settings_enable),
           \   "Errors                  : " . join(s:virk_errors, ",")
           \ ], l:tmpFile)
   else
@@ -371,9 +357,6 @@ function! virkspaces#virksourceallsettings()
       call add(s:virk_errors, "[VirkSpaces] E344: Caused by malformed session file")
       call virkspaces#virkmakesession()
     endtry
-  endif
-  if g:virk_coc_settings_enable != 0
-    call virkspaces#virkcocsettings()
   endif
   call virkspaces#virksourcevonce()
   call virkspaces#virksourcevirksettings()
