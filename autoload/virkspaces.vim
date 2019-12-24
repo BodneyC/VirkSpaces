@@ -43,7 +43,8 @@ endfunction
 " ------------- Directory functions -------------
 
 function! s:findVirkDirRecursive(dirname) abort
-  if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
+  if strpart(a:dirname, 0, stridx(a:dirname, "://")) != "" 
+        \ || a:dirname == $HOME
     return "0"
   endif
   if g:virk_ignore_enable && filereadable(a:dirname . "/" . g:virk_ignore_filename)
