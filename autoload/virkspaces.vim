@@ -14,8 +14,8 @@
 "              --`-'                       `--`  `--'     `-'   ---'
 "
 "
-let s:virk_settings_dir          = ""
-let s:virk_errors                = []
+let s:virk_settings_dir = ""
+let s:virk_errors       = []
 
 " ------------- Sourcing functions -------------
 
@@ -64,10 +64,6 @@ endfunction
 function! virkspaces#virkfindvirkdir() abort
   let l:curDir = getcwd()
   let s:virk_settings_dir = s:findVirkDirRecursive(l:curDir)
-endfunction
-
-function! virkspaces#virkchangepwd()
-  cd `=g:virk_root_dir`
 endfunction
 
 " ------------- Deletion functions -------------
@@ -220,7 +216,7 @@ function! virkspaces#virknerdtreesave()
   exec "NERDTreeProjectSave " . g:virk_root_dir
 endfunction
 
-function! s:delDirBuffers()
+function! s:close_dir_buffers()
   for i in map(copy(getbufinfo()), "v:val.bufnr")
     if isdirectory(buffer_name(i))
       exec "bd!" . i
@@ -228,30 +224,30 @@ function! s:delDirBuffers()
   endfor
 endfunction
 
-function! s:close_others()
-  let dict = { 
-        \   "__Tagbar__.1": "TagbarOpen",
-        \   "__vista__": "Vista!! | wincmd h",
-        \   "\\[coc-explorer\\]": "CocCommand explorer --toggle" 
-        \ }
-  for [k, v] in items(dict)
-    let winnr = bufwinnr(k)
-    if winnr != -1
-      exec winnr . "wincmd q"
-      let bufnr = 0
-      while bufnr != -1
-        let bufnr = bufnr(k)
-        try
-          exec "bd!" . bufnr
-        catch E516
-          let bufnr = -1
-        endtry
-      endwhile
-      call virkspaces#virkvoncewrite(v, 1)
-    else
-      call virkspaces#virkvonceremove(v)
+function s:handle_close(rgx, cmd)
+  let l:found = v:false
+  for b in filter(range(1, bufnr('$')), 'bufexists(v:val)')
+    let l:name = bufname(b)
+    if match(l:name, a:rgx) != -1
+      echom a:rgx . ', ' . l:name . ', ' . match(a:rgx, l:name)
+      if bufwinnr(b) != -1
+        let l:found = v:true
+      endif
+      exec 'bw!' . b
     endif
   endfor
+  if l:found
+    call virkspaces#virkvoncewrite(a:cmd, 1)
+  else
+    call virkspaces#virkvonceremove(a:cmd)
+  endif
+endfunction
+
+function! s:close_others()
+  call s:handle_close("__Tagbar__.[0-9]*",  "TagbarOpen")
+  call s:handle_close("__vista__",          "Vista!! | wincmd h")
+  call s:handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
+  call s:handle_close("^$", "" )
 endfunction
 
 function! s:close_nerdtree()
@@ -266,10 +262,9 @@ function! s:close_nerdtree()
 endfunction
 
 function s:close_terminals()
-  let buffers = filter(range(1, bufnr("$")), "bufexists(v:val)")
-  for b in buffers
+  for b in filter(range(1, bufnr("$")), "bufexists(v:val)")
     if getbufvar(b, "&buftype", "ERROR") == "terminal"
-      exec "bd!" . b
+      exec "bw!" . b
     endif
   endfor
 endfunction
@@ -279,7 +274,7 @@ function! virkspaces#virkupdateonleave()
     call s:close_nerdtree()
     call s:close_others()
     call s:close_terminals()
-    call s:delDirBuffers()
+    call s:close_dir_buffers()
     if g:virk_make_session_on_leave
       call virkspaces#virkmakesession()
     endif
@@ -379,7 +374,7 @@ function! virkspaces#virkloadvirkspace()
     echom "[VirkSpaces] No virkspace found"
     return
   endif
-  call virkspaces#virkchangepwd()
+  cd `=g:virk_root_dir`
   call virkspaces#virksourceallsettings() " Sources session, must be before buffer change
   if exists("l:first")
     if ! isdirectory(l:first)
