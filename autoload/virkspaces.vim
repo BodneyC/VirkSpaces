@@ -15,6 +15,7 @@
 "
 "
 let s:virk_settings_dir = ""
+let s:virk_moved        = ""
 let s:virk_errors       = []
 
 " ------------- Sourcing functions -------------
@@ -43,12 +44,12 @@ endfunction
 " ------------- Directory functions -------------
 
 function! s:findVirkDirRecursive(dirname) abort
-  if strpart(a:dirname, 0, stridx(a:dirname, "://")) != "" 
+  if strpart(a:dirname, 0, stridx(a:dirname, "://")) != ""
         \ || a:dirname == $HOME
-    return "0"
+    return "NONE"
   endif
   if g:virk_ignore_enable && filereadable(a:dirname . "/" . g:virk_ignore_filename)
-    return "1"
+    return "IGNORE"
   endif
   let l:settingsDir = a:dirname . "/" . g:virk_dirname
   if isdirectory(l:settingsDir)
@@ -69,19 +70,19 @@ endfunction
 " ------------- Deletion functions -------------
 
 function! virkspaces#virkcleanvirkspace() abort
-  if s:virk_settings_dir == "0"
+  if s:virk_settings_dir == "IGNORE"
     return
   endif
   let l:delall = s:yesno("Delete all in " . s:virk_settings_dir . "?")
   for l:fn in [
-        \   g:virk_settings_filename, 
-        \   g:virk_session_filename, 
+        \   g:virk_settings_filename,
+        \   g:virk_session_filename,
         \   g:virk_vonce_filename,
-        \   g:virk_tags_filename, 
+        \   g:virk_tags_filename,
         \ ]
     let l:fn = s:virk_settings_dir . "/" . l:fn
-    if filereadable(l:fn) 
-      if l:delall 
+    if filereadable(l:fn)
+      if l:delall
         call delete(l:fn)
       else
         if s:yesno("Delete " . l:fn . "?")
@@ -119,7 +120,7 @@ function! virkspaces#virkcreatevirkspace() abort
     endif
   endif
   call virkspaces#virkloadvirkspace()
-  call s:virk_error_report()
+  call <SID>virk_error_report()
 endfunction
 
 " https://github.com/neoclide/coc.nvim/pull/1110/commits/3bf6e19ea
@@ -128,21 +129,21 @@ function! virkspaces#virkcoccreate()
   let fsRootDir = fnamemodify($HOME, ":p:h:h:h")
 
   if currentDir == $HOME
-    echom "Can't resolve local config from current working directory."
+    echom "Can"t resolve local config from current working directory."
     return
   endif
 
   while isdirectory(currentDir) && !(currentDir ==# $HOME) && !(currentDir ==# fsRootDir)
-    if isdirectory(currentDir.'/'.g:virk_dirname)
-      execute 'edit '.currentDir.'/'.g:virk_dirname.'/coc-settings.json'
+    if isdirectory(currentDir."/".g:virk_dirname)
+      execute "edit ".currentDir."/".g:virk_dirname."/coc-settings.json"
       return
     endif
-    let currentDir = fnamemodify(currentDir, ':p:h:h')
+    let currentDir = fnamemodify(currentDir, ":p:h:h")
   endwhile
 
   if coc#util#prompt_confirm("No local config detected, would you like to create ".g:virk_dirname."/coc-settings.json?")
-    call mkdir(g:virk_dirname, 'p')
-    execute 'edit 'g:virk_dirname."/coc-settings.json'
+    call mkdir(g:virk_dirname, "p")
+    execute "edit "g:virk_dirname."/coc-settings.json"
   endif
 endfunction
 
@@ -226,14 +227,14 @@ endfunction
 
 function s:handle_close(rgx, cmd)
   let l:found = v:false
-  for b in filter(range(1, bufnr('$')), 'bufexists(v:val)')
+  for b in filter(range(1, bufnr("$")), "bufexists(v:val)")
     let l:name = bufname(b)
     if match(l:name, a:rgx) != -1
-      echom a:rgx . ', ' . l:name . ', ' . match(a:rgx, l:name)
+      echom a:rgx . ", " . l:name . ", " . match(a:rgx, l:name)
       if bufwinnr(b) != -1
         let l:found = v:true
       endif
-      exec 'bw!' . b
+      exec "bw!" . b
     endif
   endfor
   if l:found
@@ -244,10 +245,10 @@ function s:handle_close(rgx, cmd)
 endfunction
 
 function! s:close_others()
-  call s:handle_close("__Tagbar__.[0-9]*",  "TagbarOpen")
-  call s:handle_close("__vista__",          "Vista!! | wincmd h")
-  call s:handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
-  call s:handle_close("^$", "" )
+  call <SID>handle_close("__Tagbar__.[0-9]*",  "TagbarOpen")
+  call <SID>handle_close("__vista__",          "Vista!! | wincmd h")
+  call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
+  call <SID>handle_close("^$", "" )
 endfunction
 
 function! s:close_nerdtree()
@@ -270,11 +271,11 @@ function s:close_terminals()
 endfunction
 
 function! virkspaces#virkupdateonleave()
-  if s:virk_settings_dir != "0"
-    call s:close_nerdtree()
-    call s:close_others()
-    call s:close_terminals()
-    call s:close_dir_buffers()
+  if s:virk_settings_dir != "IGNORE"
+    call <SID>close_nerdtree()
+    call <SID>close_others()
+    call <SID>close_terminals()
+    call <SID>close_dir_buffers()
     if g:virk_make_session_on_leave
       call virkspaces#virkmakesession()
     endif
@@ -358,19 +359,30 @@ function! virkspaces#virksourceallsettings()
   call virkspaces#virksourcevirksettings()
 endfunction
 
+function! s:process_first_arg(first)
+  if fnamemodify(a:first, ":p") !~ "^" . g:virk_root_dir
+    let s:virk_moved = " (moved)"
+    if isdirectory(a:first)
+      exec "cd " . a:first
+    else
+      exec "cd " . fnamemodify(a:first, ":p:h")
+    endif
+    call virkspaces#virkfindvirkdir()
+  endif
+endfunction
+
 function! virkspaces#virkloadvirkspace()
+  call virkspaces#virkfindvirkdir()
   if argc() > 0
-    let l:first = argv()[0]
+    call <SID>process_first_arg(argv()[0])
   endif
-  if exists("l:first") && isdirectory(l:first)
-    exec "cd " . l:first
-  endif
-  call virkspaces#virkfindvirkdir() 
-  if s:virk_settings_dir == "1"
+  if s:virk_settings_dir == "IGNORE"
+    let g:virk_enable = 0
     echom "[VirkSpaces] Found " . g:virk_ignore_filename
     return
   endif
-  if s:virk_settings_dir == "0"
+  if s:virk_settings_dir == "NONE"
+    let g:virk_enable = 0
     echom "[VirkSpaces] No virkspace found"
     return
   endif
@@ -381,6 +393,6 @@ function! virkspaces#virkloadvirkspace()
       exec "b " . l:first
     endif
   endif
-  echom "[VirkSpaces] Virkspace found: " . s:virk_settings_dir
-  call s:virk_error_report()
+  echom "[VirkSpaces] Virkspace found: '" . fnamemodify(s:virk_settings_dir, ":h:t") . "'" . s:virk_moved
+  call <SID>virk_error_report()
 endfunction
