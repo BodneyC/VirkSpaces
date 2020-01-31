@@ -374,7 +374,8 @@ endfunction
 function! virkspaces#virkloadvirkspace()
   call virkspaces#virkfindvirkdir()
   if argc() > 0
-    call <SID>process_first_arg(argv()[0])
+    let l:first = argv()[0]
+    call <SID>process_first_arg(l:first)
   endif
   if s:virk_settings_dir == "IGNORE"
     let g:virk_enable = 0
@@ -388,10 +389,8 @@ function! virkspaces#virkloadvirkspace()
   endif
   cd `=g:virk_root_dir`
   call virkspaces#virksourceallsettings() " Sources session, must be before buffer change
-  if exists("l:first")
-    if ! isdirectory(l:first)
-      exec "b " . l:first
-    endif
+  if exists("l:first") && ! isdirectory(l:first)
+    exec "b " . l:first
   endif
   echom "[VirkSpaces] Virkspace found: '" . fnamemodify(s:virk_settings_dir, ":h:t") . "'" . s:virk_moved
   call <SID>virk_error_report()
