@@ -248,7 +248,8 @@ function! s:close_others()
   call <SID>handle_close("__Tagbar__.[0-9]*",  "TagbarOpen")
   call <SID>handle_close("__vista__",          "Vista!! | wincmd h")
   call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
-  call <SID>handle_close("^$", "" )
+  call <SID>handle_close("__Mundo__*", "MundoToggle" )
+  call <SID>handle_close("^$", "")
 endfunction
 
 function! s:close_nerdtree()
