@@ -271,7 +271,7 @@ function s:close_terminals()
 endfunction
 
 function! virkspaces#virkupdateonleave()
-  if s:virk_settings_dir != "IGNORE"
+  if g:virk_enable && s:virk_settings_dir != "IGNORE"
     call <SID>close_nerdtree()
     call <SID>close_others()
     call <SID>close_terminals()
