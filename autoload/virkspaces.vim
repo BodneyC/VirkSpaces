@@ -16,6 +16,7 @@
 "
 let s:virk_settings_dir = ""
 let s:virk_moved        = ""
+let s:virk_dirname      = ""
 let s:virk_errors       = []
 
 " ------------- Sourcing functions -------------
@@ -51,11 +52,14 @@ function! s:findVirkDirRecursive(dirname) abort
   if g:virk_ignore_enable && filereadable(a:dirname . "/" . g:virk_ignore_filename)
     return "IGNORE"
   endif
-  let l:settingsDir = a:dirname . "/" . g:virk_dirname
-  if isdirectory(l:settingsDir)
-    let g:virk_root_dir = a:dirname
-    return l:settingsDir
-  endif
+  for l:vdn in g:virk_dirnames
+    let l:settingsDir = a:dirname . "/" . l:vdn
+    if isdirectory(l:settingsDir)
+      let g:virk_root_dir = a:dirname
+      let s:virk_dirname = l:vdn
+      return l:settingsDir
+    endif
+  endfor
   let l:parentDir = strpart(a:dirname, 0, strridx(a:dirname, "/"))
   if isdirectory(l:parentDir)
     return s:findVirkDirRecursive(l:parentDir)
@@ -102,17 +106,17 @@ function! virkspaces#virkcreatevirkspace() abort
       return
     endif
   endif
-  if isdirectory(l:projDir . "/" . g:virk_dirname)
-    if ! s:yesno("\"" . l:projDir . "/" . g:virk_dirname . "\" exists, overwrite?")
+  if isdirectory(l:projDir . "/" . g:virk_dirnames[0])
+    if ! s:yesno("\"" . l:projDir . "/" . g:virk_dirnames[0] . "\" exists, overwrite?")
       return
     else
-      if delete(fnameescape(l:projDir . "/" . g:virk_dirname))
-        echom "[VirkSpaces] \"" . l:projDir . "/" . g:virk_dirname . " could not be deleted, exiting..."
+      if delete(fnameescape(l:projDir . "/" . g:virk_dirnames[0]))
+        echom "[VirkSpaces] \"" . l:projDir . "/" . g:virk_dirnames[0] . " could not be deleted, exiting..."
         return
       endif
     endif
   endif
-  call mkdir(l:projDir . "/" . g:virk_dirname)
+  call mkdir(l:projDir . "/" . g:virk_dirnames[0])
   echom "[VirkSpaces] Project directory created"
   if g:virk_cd_on_create == 0
     if s:yesno("CD to project directory parent?")
@@ -134,16 +138,17 @@ function! virkspaces#virkcoccreate()
   endif
 
   while isdirectory(currentDir) && !(currentDir ==# $HOME) && !(currentDir ==# fsRootDir)
-    if isdirectory(currentDir."/".g:virk_dirname)
-      execute "edit ".currentDir."/".g:virk_dirname."/coc-settings.json"
+    if isdirectory(currentDir . "/" . s:virk_dirname)
+      execute "edit " . currentDir . "/" . s:virk_dirname . "/coc-settings.json"
       return
     endif
     let currentDir = fnamemodify(currentDir, ":p:h:h")
   endwhile
 
-  if coc#util#prompt_confirm("No local config detected, would you like to create ".g:virk_dirname."/coc-settings.json?")
-    call mkdir(g:virk_dirname, "p")
-    execute "edit "g:virk_dirname."/coc-settings.json"
+  if coc#util#prompt_confirm("No local config detected, would you like to create "
+        \ . s:virk_dirname . "/coc-settings.json?")
+    call mkdir(s:virk_dirname, "p")
+    execute "edit "s:virk_dirname."/coc-settings.json"
   endif
 endfunction
 
@@ -393,6 +398,9 @@ function! virkspaces#virkloadvirkspace()
   if exists("l:first") && ! isdirectory(l:first)
     exec "b " . l:first
   endif
-  echom "[VirkSpaces] Virkspace found: '" . fnamemodify(s:virk_settings_dir, ":h:t") . "'" . s:virk_moved
+  echom "[VirkSpaces] Virkspace found: '"
+        \ . fnamemodify(s:virk_settings_dir, ":h:t")
+        \ . " (" . s:virk_dirname . ")'"
+        \ . s:virk_moved
   call <SID>virk_error_report()
 endfunction

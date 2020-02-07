@@ -14,7 +14,7 @@
      : \ ; :  |`--'   ; |,'   --'---'| | : ;   '   |     | :    --.     /  ~
       '-"| ,  |       '-'            `-'.| |    .-./\\  / \ \  / `-'---'   ~
           --`-'                       `--`  `--'     `-'   ---'            ~
-                                                                                        
+
 
 ==========================================================================
 CONTENTS                                                 *VirkSpaceContents*
@@ -52,58 +52,58 @@ Most of the functionality is accomplished through the plugins functions:
 
 
   *VSCreateVirkSpace*         Params: None
-  
+
                             Desc: Used to create a |VirkSpace|, cwd is 
                                   prompted and the user can erase or 
                                   append at will.
-  
+
 
   *VSCleanVirkSpace*          Params: None
-            
+
                             Desc: With confirmation, delete the files
                                   in the |VirkSpace|
 
 
   *VSFindVirkDir*              Params: None
-  
-                            Desc: Find and set |g:virk_dirname|, uses
+
+                            Desc: Find and set |g:virk_dirnames|, uses
                                   directory of current buffer as a 
                                   starting point (`expand("%:p:h")`).
-  
-  
+
+
   *VSSourceSettings*             Params: None
-  
+
                             Desc: Source |g:virk_settings_filename|.
-  
+
 
   *VSSourceVonce*                Params: None
 
                             Desc: Source |g:virk_vonce_filename|.
 
-  
+
   *VSSourceSession*              Params: None
-  
+
                             Desc: Source |g:virk_session_filename|.
-  
-  
+
+
   *VSSetTags*                 Params: None
-  
+
                             Desc: Set tags file to |g:virk_tags_filename|.
-  
-  
+
+
   *VSChangePWD*                  Params: None
-  
+
                             Desc: Change directory to project |VirkSpace|.
 
 
   *VSCoCSettings*             Params: None
-                
+
                             Desc: Sources CoC settings from
                                   |g:virk_coc_filename|
-  
-  
+
+
   *VSLoadVirkSpace*           Params: None
-  
+
                             Desc: Sets full |VirkSpace|. Calls:
                                   - |VSSetVirkDir|
                                   - |VSSetPWD|
@@ -115,50 +115,50 @@ Most of the functionality is accomplished through the plugins functions:
                                   - |VSSetVonce|
                                   - |VSSetSettings|
 
-  
+
   *VSMakeSession*             Params: None
-  
+
                             Desc: Create session file
                                   (|g:virk_session_filename|) in 
-                                  |g:virk_dirname|.
+                                  |g:virk_dirnames|.
 
 
   *VSMakeVirkFile*            Params: None
 
                             Desc: Create |g:virk_settings_filename|
 
-  
+
   *VSMakeVonceFile*           Params: None
 
                             Desc: Create |g:virk_vonce_filename|
 
-  
+
   *VSMakeTagsFile*            Params: None
 
                             Desc: Create |g:virk_tags_filename|
 
-  
+
   *VSVonceWrite*              Params:
                               `cmd`   - String to write to 
                                        |g:virk_vonce_filename|
                               `order` - `[01]` for whether to append or
                                        prepend
-  
+
                             Desc: Write `cmd` to |g:virk_vonce_filename| 
                                   if the line doesn't exists (regex 
                                   match).
 
-  
+
   *VSVonceRemove*             Params:
                               `cmd`   - String to write to 
                                        |g:virk_vonce_filename|
-  
+
                             Desc: Remove `cmd` from |g:virk_vonce_filename|
                                   if present.
 
-  
+
   *VSMakeSessionOnLeave*      Params: None
-  
+
                             Desc: Closes NERDTree and Vista (only these 
                                   at the moment) before calling 
                                   |VSMakeSession|.
@@ -234,60 +234,53 @@ CONFIGURATION                                       *VirkSpaceConfiguration*
 Most of the configuration is handled by *VirkSpaceGlobalVariables* :
 
   *g:virk_enable*                    Default: `1`
-  
+
                                    Desc: Specifies whether |VirkSpaces| is 
                                          enabled.
-  
-  
-  *g:virk_dirname*                   Default: `.virkspace`
-  
-                                   Desc: Specifies the name of the project
-                                         directory (the *VirkSpace* ) to 
-                                         look for.
-                                   
-  
+
+
   *g:virk_ignore_enable*             Default: `1`
-  
+
                                    Desc: Specifies whether not to load 
                                          |virkspace| if 
                                          |g:virk_ignore_filename| present 
                                          in pwd
-  
-  
-  *g:virk_dirname*                   Default: `.virkspace`
-  
-                                   Desc: Specifies the name of the project
+
+
+  *g:virk_dirnames*                   Default: `[.virkspace, .vim, .git]`
+
+                                   Desc: Specifies the names of the project
                                          directory (the *VirkSpace* ) to 
                                          look for.
-                                   
-  
+
+
   *g:virk_cd_on_create*              Default: `1`
 
                                    Desc: If not `0`, will cd to |VirkSpace|
                                          root directory upon creation.
-                                         
-                                        
+
+
   *g:virk_settings_filename*         Default: `virkspace.vim`
-  
+
                                    Desc: Specifies filename of `.vimrc`-like 
                                          settings file to look for in 
-                                         |g:virk_dirname|. 
-                                   
-  
+                                         |g:virk_dirnames|. 
+
+
   *g:virk_vonce_filename*            Default: `virkvonce.vim`
-  
+
                                    Desc: Specifies filename for once only 
                                          settings, such as `NERDTreeToggle`.
-                                   
-  
+
+
   *g:virk_session_filename*          Default: `session.vim`
-  
+
                                    Desc: Specifies filename for vim 
                                          session.
-  
-  
+
+
   *g:virk_tags_filename*             Default: `tags`
-  
+
                                    Desc: Specifies filename for tags file.
 
 
@@ -296,21 +289,21 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
                                    Desc: Specifies the binary used to
                                          generate |g:virk_tags_filename|
 
-  
+
   *g:virk_tags_flags*                Default `-Raf`
 
                                    Desc: Specifies the flags to give to
                                          |g:virk_tags_bin|
 
-  
-  *g:virk_tags_excludes*                Default `[ |g:virk_dirname| ]`
+
+  *g:virk_tags_excludes*                Default `|g:virk_dirnames|`
 
                                    Desc: Specifies directory or filenames
                                          to exclude from tag generation
 
-  
+
   *g:virk_coc_settings_enable*       Default: `1`
-  
+
                                    Desc: Specifies whether CoC settings 
                                          should be sources from the 
                                          |VirkSpace|.
@@ -321,23 +314,23 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
                                    Desc: Specifies the filename in which to
                                          find CoC settings.
 
-  
+
   *g:virk_source_session*            Default: `1`
-  
+
                                    Desc: Specifies whether to source
                                          |g:virk_session_filename| by 
                                          default.
 
-  
+
   *g:virk_make_session_on_leave*     Default: 1
-  
+
                                    Desc: Specifies whether to generate
                                          |g:virk_session_filename| on 
                                          |VimLeave|
 
 
   *g:virk_update_on_leave*           Default: 1
-  
+
                                    Desc: Specifies whether to update
                                          |g:virk_vonce_filename| on 
                                          |VimLeave|
@@ -373,9 +366,9 @@ BUGS                                                         *VirkSpaceBugs*
 ==========================================================================
 LICENSE                                                   *VirkSpaceLicense*
 
-  
+
 This plugin is distributed and can be redistributed under the GPL v2.0.
-  
+
   See `$(git rev-parse --show-toplevel)/LICENSE`
 
 
