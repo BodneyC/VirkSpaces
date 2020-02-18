@@ -22,6 +22,7 @@ let s:virk_errors       = []
 " ------------- Sourcing functions -------------
 
 function! virkspaces#virksourcevirksettings()
+  if ! g:virk_enable | return | endif
   let l:fn = s:virk_settings_dir . "/" . g:virk_settings_filename
   if filereadable(l:fn) && buflisted(bufnr("%"))
     exec "source " . l:fn
@@ -133,7 +134,7 @@ function! virkspaces#virkcoccreate()
   let fsRootDir = fnamemodify($HOME, ":p:h:h:h")
 
   if currentDir == $HOME
-    echom "Can"t resolve local config from current working directory."
+    echom "Can't resolve local config from current working directory."
     return
   endif
 
@@ -155,9 +156,9 @@ endfunction
 function! virkspaces#virkmaketagsfile()
   let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
   let l:exc = ""
-  for exclude in g:virk_tags_excludes
-    let l:exc .= "--exclude=" . exclude . " "
-  endfor
+  if len(g:virk_tags_excludes) > 0
+    let l:exc = join(" --exclude ", g:virk_tags_excludes)
+  endif
   exec "set tags=" . l:fn
   silent exec "!" . g:virk_tags_bin . " " . g:virk_tags_flags . " " . l:fn . " " . l:exc . " " . g:virk_root_dir
 endfunction
@@ -175,10 +176,11 @@ function! virkspaces#virkmakevirkfile()
 endfunction
 
 function! virkspaces#virkmakesession()
-  let sessionoptions = &sessionoptions
-  set sessionoptions+=winsize,winpos sessionoptions-=blank,options,resize,folds
+  let l:ssop = &ssop
+  set ssop+=winsize,winpos,folds,globals,tabpages,terminal
+  set ssop-=blank,options,resize,sesdir
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
-  let &sessionoptions = sessionoptions
+  let &ssop = l:ssop
 endfunction
 
 " ------------- Updating functions -------------
@@ -254,7 +256,7 @@ function! s:close_others()
   call <SID>handle_close("__vista__",          "Vista!! | wincmd h")
   call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
   call <SID>handle_close("__Mundo__*", "MundoToggle" )
-  call <SID>handle_close("^$", "")
+  call <SID>handle_close("\\(^$\\|FAR.*\\)", "")
 endfunction
 
 function! s:close_nerdtree()
@@ -277,6 +279,7 @@ function s:close_terminals()
 endfunction
 
 function! virkspaces#virkupdateonleave()
+  if ! g:virk_update_on_leave | return | endif
   if g:virk_enable && s:virk_settings_dir != "IGNORE"
     call <SID>close_nerdtree()
     call <SID>close_others()
@@ -378,6 +381,7 @@ function! s:process_first_arg(first)
 endfunction
 
 function! virkspaces#virkloadvirkspace()
+  if ! g:virk_enable | return | endif
   call virkspaces#virkfindvirkdir()
   if argc() > 0
     let l:first = argv()[0]

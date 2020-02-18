@@ -58,13 +58,7 @@ command! -nargs=0 VirkCocCreate          call virkspaces#virkcoccreate()
 
 augroup virk-spaces
   autocmd!
-  autocmd VimEnter * nested if g:virk_enable
-        \ |   call virkspaces#virkloadvirkspace()
-        \ | endif
-  autocmd BufEnter * if g:virk_enable
-        \ |   call virkspaces#virksourcevirksettings()
-        \ | endif
-  autocmd VimLeave * if g:virk_update_on_leave
-        \ |   call virkspaces#virkupdateonleave()
-        \ | endif
+  autocmd VimEnter * nested call virkspaces#virkloadvirkspace()
+  autocmd BufEnter * call virkspaces#virksourcevirksettings()
+  autocmd VimLeave * call virkspaces#virkupdateonleave()
 augroup END
