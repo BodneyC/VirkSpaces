@@ -177,7 +177,7 @@ endfunction
 
 function! virkspaces#virkmakesession()
   let l:ssop = &ssop
-  set ssop+=winsize,winpos,folds,globals,tabpages,terminal
+  set ssop+=winsize,winpos,folds,globals,tabpages
   set ssop-=blank,options,resize,sesdir
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
   let &ssop = l:ssop
