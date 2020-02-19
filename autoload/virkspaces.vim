@@ -21,7 +21,7 @@ let s:virk_errors       = []
 
 " ------------- Sourcing functions -------------
 
-function! virkspaces#virksourcevirksettings()
+function! virkspaces#sourcevirksettings()
   if ! g:virk_enable | return | endif
   let l:fn = s:virk_settings_dir . "/" . g:virk_settings_filename
   if filereadable(l:fn) && buflisted(bufnr("%"))
@@ -29,14 +29,14 @@ function! virkspaces#virksourcevirksettings()
   endif
 endfunction
 
-function! virkspaces#virksourcesession()
+function! virkspaces#sourcesession()
   let l:fn = s:virk_settings_dir . "/" . g:virk_session_filename
   if filereadable(l:fn)
     exec "source " . l:fn
   endif
 endfunction
 
-function! virkspaces#virksourcevonce()
+function! virkspaces#sourcevonce()
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
   if filereadable(l:fn)
     exec "source " . l:fn
@@ -67,14 +67,14 @@ function! s:findVirkDirRecursive(dirname) abort
   endif
 endfunction
 
-function! virkspaces#virkfindvirkdir() abort
+function! virkspaces#findvirkdir() abort
   let l:curDir = getcwd()
   let s:virk_settings_dir = s:findVirkDirRecursive(l:curDir)
 endfunction
 
 " ------------- Deletion functions -------------
 
-function! virkspaces#virkcleanvirkspace() abort
+function! virkspaces#cleanvirkspace() abort
   if s:virk_settings_dir == "IGNORE"
     return
   endif
@@ -100,7 +100,7 @@ endfunction
 
 " ------------- Creation functions -------------
 
-function! virkspaces#virkcreatevirkspace() abort
+function! virkspaces#createvirkspace() abort
   let l:projDir = input("Dir: ", expand("%:p:h"))
   if ! isdirectory(l:projDir)
     if ! s:yesno("\"" . l:projDir . "\" is not a directory, make dirs?")
@@ -124,12 +124,12 @@ function! virkspaces#virkcreatevirkspace() abort
       return
     endif
   endif
-  call virkspaces#virkloadvirkspace()
+  call virkspaces#loadvirkspace()
   call <SID>virk_error_report()
 endfunction
 
 " https://github.com/neoclide/coc.nvim/pull/1110/commits/3bf6e19ea
-function! virkspaces#virkcoccreate()
+function! virkspaces#coccreate()
   let currentDir = getcwd()
   let fsRootDir = fnamemodify($HOME, ":p:h:h:h")
 
@@ -153,7 +153,7 @@ function! virkspaces#virkcoccreate()
   endif
 endfunction
 
-function! virkspaces#virkmaketagsfile()
+function! virkspaces#maketagsfile()
   let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
   let l:exc = ""
   if len(g:virk_tags_excludes) > 0
@@ -163,29 +163,28 @@ function! virkspaces#virkmaketagsfile()
   silent exec "!" . g:virk_tags_bin . " " . g:virk_tags_flags . " " . l:fn . " " . l:exc . " " . g:virk_root_dir
 endfunction
 
-function! virkspaces#virkmakevoncefile()
+function! virkspaces#makevoncefile()
   let l:vonce_file = s:virk_settings_dir . "/" . g:virk_vonce_filename
   exec "e " . l:vonce_file
   exec "au! BufWrite <buffer> so %"
 endfunction
 
-function! virkspaces#virkmakevirkfile()
+function! virkspaces#makevirkfile()
   let l:virk_file = s:virk_settings_dir . "/" . g:virk_settings_filename
   exec "e " . l:virk_file
   exec "au! BufWrite <buffer> so %"
 endfunction
 
-function! virkspaces#virkmakesession()
+function! virkspaces#makesession()
   let l:ssop = &ssop
-  set ssop+=winsize,winpos,folds,globals,tabpages
-  set ssop-=blank,options,resize,sesdir
+  exec 'set ssop=' . g:virk_ssop
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
   let &ssop = l:ssop
 endfunction
 
 " ------------- Updating functions -------------
 
-function! virkspaces#virkvoncewrite(cmd, odr)
+function! virkspaces#voncewrite(cmd, odr)
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
   if ! filereadable(l:fn)
     call writefile([a:cmd], l:fn)
@@ -205,7 +204,7 @@ function! virkspaces#virkvoncewrite(cmd, odr)
   call writefile(l:vonce, l:fn)
 endfunction
 
-function! virkspaces#virkvonceremove(cmd)
+function! virkspaces#vonceremove(cmd)
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
   if ! filereadable(l:fn)
     return
@@ -219,7 +218,7 @@ function! virkspaces#virkvonceremove(cmd)
   call writefile(l:vonce, l:fn)
 endfunction
 
-function! virkspaces#virknerdtreesave()
+function! virkspaces#nerdtreesave()
   exec "NERDTreeFocus"
   exec "NERDTreeProjectSave " . g:virk_root_dir
 endfunction
@@ -245,9 +244,9 @@ function s:handle_close(rgx, cmd)
     endif
   endfor
   if l:found
-    call virkspaces#virkvoncewrite(a:cmd, 1)
+    call virkspaces#voncewrite(a:cmd, 1)
   else
-    call virkspaces#virkvonceremove(a:cmd)
+    call virkspaces#vonceremove(a:cmd)
   endif
 endfunction
 
@@ -262,11 +261,11 @@ endfunction
 function! s:close_nerdtree()
   let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoadFromCWD"
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
-    call virkspaces#virknerdtreesave()
+    call virkspaces#nerdtreesave()
     tabdo NERDTreeClose
-    call virkspaces#virkvoncewrite(l:nt_msg, 1)
+    call virkspaces#voncewrite(l:nt_msg, 1)
   else
-    call virkspaces#virkvonceremove(l:nt_msg)
+    call virkspaces#vonceremove(l:nt_msg)
   endif
 endfunction
 
@@ -278,7 +277,7 @@ function s:close_terminals()
   endfor
 endfunction
 
-function! virkspaces#virkupdateonleave()
+function! virkspaces#updateonleave()
   if ! g:virk_update_on_leave | return | endif
   if g:virk_enable && s:virk_settings_dir != "IGNORE"
     call <SID>close_nerdtree()
@@ -286,7 +285,7 @@ function! virkspaces#virkupdateonleave()
     call <SID>close_terminals()
     call <SID>close_dir_buffers()
     if g:virk_make_session_on_leave
-      call virkspaces#virkmakesession()
+      call virkspaces#makesession()
     endif
   endif
 endfunction
@@ -330,7 +329,7 @@ endfunction
 
 " ------------- Core functions -------------
 
-function! virkspaces#virkinfo()
+function! virkspaces#info()
   let l:tmpFile = tempname()
   if g:virk_enable
     call writefile([
@@ -351,21 +350,21 @@ function! virkspaces#virkinfo()
   setl buftype=nofile bufhidden=wipe nobuflisted ro
 endfunction
 
-function! virkspaces#virksourceallsettings()
+function! virkspaces#sourceallsettings()
   if g:virk_tags_enable
-    call virkspaces#virkmaketagsfile()
+    call virkspaces#maketagsfile()
   endif
   " Catch broken session file to prevent erroring
   if g:virk_source_session
     try
-      call virkspaces#virksourcesession()
+      call virkspaces#sourcesession()
     catch /E344:/
       call add(s:virk_errors, "[VirkSpaces] E344: Caused by malformed session file")
-      call virkspaces#virkmakesession()
+      call virkspaces#makesession()
     endtry
   endif
-  call virkspaces#virksourcevonce()
-  call virkspaces#virksourcevirksettings()
+  call virkspaces#sourcevonce()
+  call virkspaces#sourcevirksettings()
 endfunction
 
 function! s:process_first_arg(first)
@@ -376,13 +375,24 @@ function! s:process_first_arg(first)
     else
       exec "cd " . fnamemodify(a:first, ":p:h")
     endif
-    call virkspaces#virkfindvirkdir()
+    call virkspaces#findvirkdir()
   endif
 endfunction
 
-function! virkspaces#virkloadvirkspace()
+function! virkspaces#status()
+  if ! exists('g:virk_root_dir')
+    return ''
+  endif
+  let l:root = fnamemodify(g:virk_root_dir, ":t")
+  if len(s:virk_moved) > 0
+    return l:root . ' (moved)'
+  endif
+  return l:root
+endfunction
+
+function! virkspaces#loadvirkspace()
   if ! g:virk_enable | return | endif
-  call virkspaces#virkfindvirkdir()
+  call virkspaces#findvirkdir()
   if argc() > 0
     let l:first = argv()[0]
     call <SID>process_first_arg(l:first)
@@ -398,13 +408,13 @@ function! virkspaces#virkloadvirkspace()
     return
   endif
   cd `=g:virk_root_dir`
-  call virkspaces#virksourceallsettings() " Sources session, must be before buffer change
+  call virkspaces#sourceallsettings() " Sources session, must be before buffer change
   if exists("l:first") && ! isdirectory(l:first)
     exec "b " . l:first
   endif
   echom "[VirkSpaces] Virkspace found: '"
         \ . fnamemodify(s:virk_settings_dir, ":h:t")
-        \ . " (" . s:virk_dirname . ")'"
+        \ . "' (" . s:virk_dirname . ")"
         \ . s:virk_moved
   call <SID>virk_error_report()
 endfunction

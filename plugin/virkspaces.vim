@@ -14,6 +14,8 @@
 "              --`-'                       `--`  `--'     `-'   ---'
 "
 "
+let s:default_ssop = "blank,buffers,curdir,folds,help,tabpages,winsize"
+
 let g:virk_enable                = get(g:, "virk_enable", 1)
 let g:virk_ignore_enable         = get(g:, "virk_ignore_enable", 1)
 let g:virk_ignore_filename       = get(g:, "virk_ignore_filename", ".virkignore")
@@ -30,35 +32,36 @@ let g:virk_tags_flags            = get(g:, "virk_tags_flags", "-Rf")
 let g:virk_tags_excludes         = get(g:, "virk_tags_excludes", g:virk_dirnames)
 let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
 let g:virk_update_on_leave       = get(g:, "virk_update_on_leave", 1)
+let g:virk_ssop                  = get(g:, "virk_ssop", s:default_ssop)
 
 let g:virk_root_dir              = ""
 
 " ------------------ Commands ------------------
 
-command! -nargs=0 VirkSourceVirkSettings call virkspaces#virksourcevirksettings()
-command! -nargs=0 VirkSourceSession      call virkspaces#virksourcesession()
-command! -nargs=0 VirkSourceVonce        call virkspaces#virksourcevonce()
-command! -nargs=0 VirkFindVirkDir        call virkspaces#virkfindvirkdir()
-command! -nargs=0 VirkChangePWD          call virkspaces#virkchangepwd()
-command! -nargs=0 VirkCleanVirkSpace     call virkspaces#virkcleanvirkspace()
-command! -nargs=0 VirkCreateVirkSpace    call virkspaces#virkcreatevirkspace()
-command! -nargs=0 VirkMakeTagsFile       call virkspaces#virkmaketagsfile()
-command! -nargs=0 VirkMakeVonceFile      call virkspaces#virkmakevoncefile()
-command! -nargs=0 VirkMakeVirkFile       call virkspaces#virkmakevirkfile()
-command! -nargs=0 VirkMakeSession        call virkspaces#virkmakesession()
-command! -nargs=1 VirkVonceWrite         call virkspaces#virkvoncewrite(<f-args>)
-command! -nargs=0 VirkUpdateOnLeave      call virkspaces#virkupdateonleave()
-command! -nargs=0 VirkInfo               call virkspaces#virkinfo()
-command! -nargs=0 VirkSourceAllSettings  call virkspaces#virksourceallsettings()
-command! -nargs=0 VirkLoadVirkSpace      call virkspaces#virkloadvirkspace()
-command! -nargs=0 VirkCocCreate          call virkspaces#virkcoccreate()
+command! -nargs=0 VirkSourceVirkSettings call virkspaces#sourcevirksettings()
+command! -nargs=0 VirkSourceSession      call virkspaces#sourcesession()
+command! -nargs=0 VirkSourceVonce        call virkspaces#sourcevonce()
+command! -nargs=0 VirkFindVirkDir        call virkspaces#findvirkdir()
+command! -nargs=0 VirkChangePWD          call virkspaces#changepwd()
+command! -nargs=0 VirkCleanVirkSpace     call virkspaces#cleanvirkspace()
+command! -nargs=0 VirkCreateVirkSpace    call virkspaces#createvirkspace()
+command! -nargs=0 VirkMakeTagsFile       call virkspaces#maketagsfile()
+command! -nargs=0 VirkMakeVonceFile      call virkspaces#makevoncefile()
+command! -nargs=0 VirkMakeVirkFile       call virkspaces#makevirkfile()
+command! -nargs=0 VirkMakeSession        call virkspaces#makesession()
+command! -nargs=1 VirkVonceWrite         call virkspaces#voncewrite(<f-args>)
+command! -nargs=0 VirkUpdateOnLeave      call virkspaces#updateonleave()
+command! -nargs=0 VirkInfo               call virkspaces#info()
+command! -nargs=0 VirkSourceAllSettings  call virkspaces#sourceallsettings()
+command! -nargs=0 VirkLoadVirkSpace      call virkspaces#loadvirkspace()
+command! -nargs=0 VirkCocCreate          call virkspaces#coccreate()
 
 
 " ------------- Automation AuGroups -------------
 
 augroup virk-spaces
   autocmd!
-  autocmd VimEnter * nested call virkspaces#virkloadvirkspace()
-  autocmd BufEnter * call virkspaces#virksourcevirksettings()
-  autocmd VimLeave * call virkspaces#virkupdateonleave()
+  autocmd VimEnter * nested call virkspaces#loadvirkspace()
+  autocmd BufEnter * call virkspaces#sourcevirksettings()
+  autocmd VimLeave * call virkspaces#updateonleave()
 augroup END

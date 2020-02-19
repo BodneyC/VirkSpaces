@@ -5,6 +5,7 @@ Fairly minimal workspace setup for Vims of all kinds.
 
 More can be read/seen about this plugin [here](https://benjc.me/blog/2019/06/20/virk-spaces.html).
 
+
 ### Installation
 
 Either add to rtp:
@@ -14,6 +15,7 @@ Either add to rtp:
 Or install with your favourite plugin manager:
 
     Plug 'BodneyC/VirkSpaces', { 'branch': 'master' }
+
 
 ### Usage
 
@@ -27,17 +29,6 @@ Generally, at the moment, currently, there are vimrc-like settings (`g:virk_sett
 
 But, as is written above, check the help file for the rest.
 
-**NOTE**: It should be noted that the session file will only be sourced if `argc()` is of length, zero; this allows the user to source local settings but get straight to the file selected.
-
-### Plugin Dependencies
-
-None of these are really hard dependencies, it's more that additional functionailty is provided to support these plugins.
-
-- [NerdTree](https://github.com/scrooloose/nerdtree)
-  - [NerdTree Project Plugin](https://github.com/scrooloose/nerdtree-project-plugin)
-- [Vista](https://github.com/liuchengxu/vista.vim)
-- [CoC](https://github.com/neoclide/coc.nvim)
-- [Tagbar](https://github.com/majutsushi/tagbar)
 
 ### Disclaimer
 
