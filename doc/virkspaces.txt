@@ -36,7 +36,7 @@ USAGE                                                       *VirkSpaceUsage*
 
 
 This section will define the usage of the plugin, the main function is 
- |VirkCreateVirkSpace|, after that, the |autocmd| commands should do the rest.
+ |VirkCreateVirkSpace|, after that, the |autocmd| commands should do the rest
 
 
 --------------------------------------------------------------------------
@@ -45,128 +45,157 @@ FUNCTIONS                                               *VirkSpaceFunctions*
 Most of the functionality is accomplished through the plugins functions:
 
 
-  *VirkSourceAllSettings*       Params: None
+  *virkspaces#source_all_settings*
 
-                            Desc: Sources all settings available
-                                  (including |g:virk_vonce_filename)
+      Params: None
 
-
-  *VirkCreateVirkSpace*         Params: None
-
-                            Desc: Used to create a |VirkSpace|, cwd is 
-                                  prompted and the user can erase or 
-                                  append at will.
+      Desc: Sources all settings available (including 
+           |g:virk_vonce_filename|)
 
 
-  *VirkCleanVirkSpace*          Params: None
+  *virkspaces#create_virkspace*
 
-                            Desc: With confirmation, delete the files
-                                  in the |VirkSpace|
+      Params: None
 
-
-  *VirkFindVirkDir*              Params: None
-
-                            Desc: Find and set |g:virk_dirnames|, uses
-                                  directory of current buffer as a 
-                                  starting point (`expand("%:p:h")`).
+      Desc: Used to create a |VirkSpace|, cwd is prompted and the user can 
+            erase or append at will
 
 
-  *VirkSourceSettings*             Params: None
+  *virkspaces#clean_virkspace*
 
-                            Desc: Source |g:virk_settings_filename|.
+      Params: None
 
-
-  *VirkSourceVonce*                Params: None
-
-                            Desc: Source |g:virk_vonce_filename|.
+      Desc: With confirmation, delete the files in the |VirkSpace|
 
 
-  *VirkSourceSession*              Params: None
+  *virkspaces#find_virk_dir*
 
-                            Desc: Source |g:virk_session_filename|.
+      Params: None
 
-
-  *VirkSetTags*                 Params: None
-
-                            Desc: Set tags file to |g:virk_tags_filename|.
+      Desc: Find and set |g:virk_dirnames|, uses directory of current 
+            buffer as a starting point (`expand("%:p:h")`)
 
 
-  *VirkChangePWD*                  Params: None
+  *virkspaces#source_settings*
 
-                            Desc: Change directory to project |VirkSpace|.
+      Params: None
 
-
-  *VirkCoCSettings*             Params: None
-
-                            Desc: Sources CoC settings from
-                                  |g:virk_coc_filename|
+      Desc: Source |g:virk_settings_filename|
 
 
-  *VirkLoadVirkSpace*           Params: None
+  *virkspaces#source_vonce*
 
-                            Desc: Sets full |VirkSpace|. Calls:
-                                  - |VirkSetVirkDir|
-                                  - |VirkSetPWD|
-                                  - |VirkSetTags|
-                                  - If |g:virk_source_session| is true,
-                                     |VirkSetSession|
-                                  - If |g:virk_coc_settings_enable| is 
-                                     true, |VirkCoCSettings|
-                                  - |VirkSetVonce|
-                                  - |VirkSetSettings|
+      Params: None
+
+      Desc: Source |g:virk_vonce_filename|
 
 
-  *VirkMakeSession*             Params: None
+  *virkspaces#source_session*
 
-                            Desc: Create session file
-                                  (|g:virk_session_filename|) in 
-                                  |g:virk_dirnames|.
+      Params: None
 
-
-  *VirkMakeVirkFile*            Params: None
-
-                            Desc: Create |g:virk_settings_filename|
+      Desc: Source |g:virk_session_filename|
 
 
-  *VirkMakeVonceFile*           Params: None
+  *virkspaces#set_tags*
 
-                            Desc: Create |g:virk_vonce_filename|
+      Params: None
 
-
-  *VirkMakeTagsFile*            Params: None
-
-                            Desc: Create |g:virk_tags_filename|
+      Desc: Set tags file to |g:virk_tags_filename|
 
 
-  *VirkVonceWrite*              Params:
-                              `cmd`   - String to write to 
-                                       |g:virk_vonce_filename|
-                              `order` - `[01]` for whether to append or
-                                       prepend
+  *virkspaces#change_pwd*
 
-                            Desc: Write `cmd` to |g:virk_vonce_filename| 
-                                  if the line doesn't exists (regex 
-                                  match).
+      Params: None
+
+      Desc: Change directory to project |VirkSpace|
 
 
-  *VirkVonceRemove*             Params:
-                              `cmd`   - String to write to 
-                                       |g:virk_vonce_filename|
+  *virkspaces#load_virkspace*
 
-                            Desc: Remove `cmd` from |g:virk_vonce_filename|
-                                  if present.
+      Params: None
+
+      Desc: Sets full |VirkSpace|
+
+      Calls:
+        - |VirkSetVirkDir|
+        - |VirkSetPWD|
+        - |VirkSetTags|
+        - If |g:virk_source_session| is true,
+           |VirkSetSession|
+        - If |g:virk_coc_settings_enable| is 
+           true, |VirkCoCSettings|
+        - |VirkSetVonce|
+        - |VirkSetSettings|
 
 
-  *VirkMakeSessionOnLeave*      Params: None
+  *virkspaces#make_session*
 
-                            Desc: Closes NERDTree and Vista (only these 
-                                  at the moment) before calling 
-                                  |VirkMakeSession|.
+      Params: None
 
-  *VirkInfo*           Params: None
+      Desc: Create session file (|g:virk_session_filename|) in 
+           |g:virk_dirnames|
 
-                            Desc: Shows some information about the current
-                                  state of |VirkSpaces|.
+
+  *virkspaces#make_virk_file*
+
+      Params: None
+
+      Desc: Create |g:virk_settings_filename|
+
+
+  *virkspaces#make_vonce_file*
+
+      Params: None
+
+      Desc: Create |g:virk_vonce_filename|
+
+
+  *virkspaces#make_tags_file*
+
+      Params: None
+
+      Desc: Create |g:virk_tags_filename|
+
+
+  *virkspaces#vonce_write*
+
+      Params:
+        `cmd`   - String to write to |g:virk_vonce_filename|
+        `order` - `[01]` for whether to append or prepend
+
+      Desc: Write `cmd` to |g:virk_vonce_filename| if the line 
+            doesn't exists (regex match)
+
+
+  *virkspaces#vonce_remove*
+
+      Params:
+        `cmd`   - String to write to |g:virk_vonce_filename|
+
+      Desc: Remove `cmd` from |g:virk_vonce_filename| if present
+
+
+  *virkspaces#make_session_on_leave*
+
+      Params: None
+
+      Desc: Closes NERDTree and Vista (only these at the moment) 
+            before calling |VirkMakeSession|
+
+  *virkspaces#info*
+
+      Params: None
+
+      Desc: Shows some information about the current state of |VirkSpaces|
+
+
+  *virkspaces#close_buffers*
+
+      Params: 
+        `[regexes]` - List of regexes to close
+
+      Desc: Shows some information about the current state of |VirkSpaces|
 
 
 --------------------------------------------------------------------------
@@ -174,7 +203,7 @@ COMMANDS                                                *VirkSpaceCommands*
 
 
 All commands are taken directly from the functions above, with the same 
- params.
+ params
 
   |VirkSourceAllSettings|
 
@@ -212,6 +241,8 @@ All commands are taken directly from the functions above, with the same
 
   |VirkInfo|
 
+  |VirkCloseBuffers|
+
 
 --------------------------------------------------------------------------
 AUTOCMDS                                                *VirkSpaceAutoCmds*
@@ -222,9 +253,9 @@ Much of this is automated through |autcmd|s:
   - |VirkLoadVirkSpace| is called on |VimEnter|
 
   - |VirkSourceSettings| is called on |BufEnter| as there are likely to be buffer
-    specific settings.
+    specific settings
 
-  - |VirkMUpdateOnLeave| is called on |VimLeave|.
+  - |VirkMUpdateOnLeave| is called on |VimLeave|
 
 
 ==========================================================================
@@ -233,112 +264,138 @@ CONFIGURATION                                       *VirkSpaceConfiguration*
 
 Most of the configuration is handled by *VirkSpaceGlobalVariables* :
 
-  *g:virk_enable*                  Default: `1`
+  *g:virk_enable*
 
-                                   Desc: Specifies whether |VirkSpaces| is 
-                                         enabled.
+      Default: `1`
 
-
-  *g:virk_ignore_enable*           Default: `1`
-
-                                   Desc: Specifies whether not to load 
-                                        |virkspace| if 
-                                        |g:virk_ignore_filename| present 
-                                         in pwd
+      Desc: Specifies whether |VirkSpaces| is enabled
 
 
-  *g:virk_ignore_filename*         Default: `.virkignore`
+  *g:virk_ignore_enable*
 
-                                   Desc: Specifies name of ignore file
+      Default: `1`
 
-
-  *g:virk_dirnames*                Default: `[.virkspace, .vim, .git]`
-
-                                   Desc: Specifies the names of the project
-                                         directory (the *VirkSpace* ) to 
-                                         look for.
+      Desc: Specifies whether not to load |virkspace| if 
+           |g:virk_ignore_filename| present in pwd
 
 
-  *g:virk_cd_on_create*            Default: `1`
+  *g:virk_ignore_filename*
 
-                                   Desc: If not `0`, will cd to |VirkSpace|
-                                         root directory upon creation.
+      Default: `.virkignore`
 
-
-  *g:virk_settings_filename*       Default: `virkspace.vim`
-
-                                   Desc: Specifies filename of `.vimrc`-like 
-                                         settings file to look for in 
-                                        |g:virk_dirnames|. 
+      Desc: Specifies name of ignore file
 
 
-  *g:virk_vonce_filename*          Default: `virkvonce.vim`
+  *g:virk_dirnames*
 
-                                   Desc: Specifies filename for once only 
-                                         settings, such as `NERDTreeToggle`.
+      Default: `[.virkspace, .vim, .git]`
 
-
-  *g:virk_session_filename*        Default: `session.vim`
-
-                                   Desc: Specifies filename for vim 
-                                         session.
+      Desc: Specifies the names of the project directory (the 
+           *VirkSpace* ) to look for
 
 
-  *g:virk_source_session*           Default: `1`
+  *g:virk_cd_on_create*
 
-                                   Desc: Specifies whether to source
-                                        |g:virk_session_filename| by 
-                                         default.
+      Default: `1`
 
-
-  *g:virk_tags_enable*             Default: `1`
-
-                                   Desc: Specifies if |VirkSpaces| should
-                                         control tags files/generation.
+      Desc: If not `0`, will cd to |VirkSpace| root directory upon creation
 
 
-  *g:virk_tags_filename*           Default: `tags`
+  *g:virk_settings_filename*
 
-                                   Desc: Specifies filename for tags file.
+      Default: `virkspace.vim`
 
-
-  *g:virk_tags_bin*                Default `ctags`
-
-                                   Desc: Specifies the binary used to
-                                         generate |g:virk_tags_filename|
+      Desc: Specifies filename of `.vimrc`-like settings file to look 
+            for in |g:virk_dirnames|
 
 
-  *g:virk_tags_flags*              Default `-Raf`
+  *g:virk_vonce_filename*
 
-                                   Desc: Specifies the flags to give to
-                                         |g:virk_tags_bin|
+      Default: `virkvonce.vim`
 
-
-  *g:virk_tags_excludes*           Default `|g:virk_dirnames|`
-
-                                   Desc: Specifies directory or filenames
-                                         to exclude from tag generation
+      Desc: Specifies filename for once only settings, such as 
+           `NERDTreeToggle`
 
 
-  *g:virk_make_session_on_leave*   Default: 1
+  *g:virk_session_filename*
 
-                                   Desc: Specifies whether to generate
-                                         |g:virk_session_filename| on 
-                                         |VimLeave|
+      Default: `session.vim`
 
-
-  *g:virk_update_on_leave*         Default: 1
-
-                                   Desc: Specifies whether to update
-                                         |g:virk_vonce_filename| on 
-                                         |VimLeave|
+      Desc: Specifies filename for vim session
 
 
-  *g:virk_ssop*                    Default: `blank,buffers,curdir,folds,help,`
-                                            `tabpages,winsize`
+  *g:virk_source_session*
 
-                                   Desc: |ssop| to use when creating 
-                                          sessions
+      Default: `1`
+
+      Desc: Specifies whether to source |g:virk_session_filename| by default
+
+
+  *g:virk_tags_enable*
+
+      Default: `1`
+
+      Desc: Specifies if |VirkSpaces| should control tags files/generation
+
+
+  *g:virk_tags_filename*
+
+      Default: `tags`
+
+      Desc: Specifies filename for tags file
+
+
+  *g:virk_tags_bin*
+
+      Default `ctags`
+
+      Desc: Specifies the binary used to generate 
+           |g:virk_tags_filename|
+
+
+  *g:virk_tags_flags*
+
+      Default `-Raf`
+
+      Desc: Specifies the flags to give to |g:virk_tags_bin|
+
+
+  *g:virk_tags_excludes*
+
+      Default `|g:virk_dirnames|`
+
+      Desc: Specifies directory or filenames to exclude from tag 
+            generation
+
+
+  *g:virk_make_session_on_leave*
+
+      Default: 1
+
+      Desc: Specifies whether to generate |g:virk_session_filename| 
+            on |VimLeave|
+
+
+  *g:virk_update_on_leave*
+
+      Default: 1
+
+      Desc: Specifies whether to update |g:virk_vonce_filename| on 
+           |VimLeave|
+
+
+  *g:virk_ssop*
+
+      Default: `blank,buffers,curdir,folds,help,tabpages,winsize`
+
+      Desc: |ssop| to use when creating sessions
+
+
+  *g:virk_close_regexes*
+
+      Default: `["^$", "FAR.*", "MERGE MSG"]`
+
+      Desc: Regexes for buffers to close on exit
 
 
 ==========================================================================
@@ -346,7 +403,7 @@ TODOS                                                       *VirkSpaceTODOs*
 
 
 There are a couple of bit that still need doing for this project to be 
- called complete.
+ called complete
 
  - [ *VirkSpaceTesting* ] Test the thing...
 
@@ -356,7 +413,7 @@ BUGS                                                         *VirkSpaceBugs*
 
 
  - There is the simple manner of testing ( |VirkSpaceTesting| ) that needs 
-   doing to find bugs, I'm sure they'll come looking for me.
+   doing to find bugs, I'm sure they'll come looking for me
 
  - [Fixed] Error from sourcing corrupt file
 
@@ -370,7 +427,7 @@ BUGS                                                         *VirkSpaceBugs*
 LICENSE                                                   *VirkSpaceLicense*
 
 
-This plugin is distributed and can be redistributed under the GPL v2.0.
+This plugin is distributed and can be redistributed under the GPL v2.0
 
   See `$(git rev-parse --show-toplevel)/LICENSE`
 
