@@ -256,15 +256,15 @@ function! virkspaces#close_buffers(lst)
 endfunction
 
 function! s:close_others()
-  call <SID>handle_close("__Tagbar__.[0-9]*",  "TagbarOpen")
-  call <SID>handle_close("__vista__",          "Vista!! | wincmd h")
+  call <SID>handle_close("__Tagbar__.[0-9]*", "TagbarOpen")
+  call <SID>handle_close("__vista__", "Vista!! | wincmd h")
   call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
   call <SID>handle_close("__Mundo__*", "MundoToggle" )
   call virkspaces#close_buffers(g:virk_close_regexes)
 endfunction
 
 function! s:close_nerdtree()
-  let l:nt_msg = "tabn 1 | NERDTreeToggle | NERDTreeProjectLoadFromCWD"
+  let l:nt_msg = 'tabn 1 | NERDTreeToggle | exec "NERDTreeProjectLoadFromCWD" | normal! <C-w><C-l>'
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     call virkspaces#nerd_tree_save()
     tabdo NERDTreeClose
