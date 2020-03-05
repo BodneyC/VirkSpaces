@@ -25,21 +25,21 @@ function! virkspaces#source_virk_settings()
   if ! g:virk_enable | return | endif
   let l:fn = s:virk_settings_dir . "/" . g:virk_settings_filename
   if filereadable(l:fn) && buflisted(bufnr("%"))
-    exec "source " . l:fn
+    silent exec "source " . l:fn
   endif
 endfunction
 
 function! virkspaces#source_session()
   let l:fn = s:virk_settings_dir . "/" . g:virk_session_filename
   if filereadable(l:fn)
-    exec "source " . l:fn
+    silent exe "source " . l:fn
   endif
 endfunction
 
 function! virkspaces#source_vonce()
   let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
   if filereadable(l:fn)
-    exec "source " . l:fn
+    silent exec "source " . l:fn
   endif
 endfunction
 

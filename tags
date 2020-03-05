@@ -1,90 +1,88 @@
 !_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
 !_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
-!_TAG_PROGRAM_VERSION	0.0.0	/0de02b65/
+!_TAG_PROGRAM_VERSION	0.0.0	/a3c87ab5/
 Disclaimer	README.md	/^### Disclaimer$/;"	S
-Fish	testing/test.py	/^class Fish:$/;"	c
 Installation	README.md	/^### Installation$/;"	S
-Plugin Dependencies	README.md	/^### Plugin Dependencies$/;"	S
-SessionLoad	.virkspace/session.vim	/^let SessionLoad = 1$/;"	v
-SessionLoad	testing/.virkspace/session.vim	/^let SessionLoad = 1$/;"	v
 Usage	README.md	/^### Usage$/;"	S
-VSChangePWD	plugin/virkspaces.vim	/^command! -nargs=0 VSChangePWD          call virkspaces#vschangepwd()$/;"	c
-VSCleanVirkSpace	plugin/virkspaces.vim	/^command! -nargs=0 VSCleanVirkSpace     call virkspaces#vscleanvirkspace()$/;"	c
-VSCoCSettings	plugin/virkspaces.vim	/^command! -nargs=0 VSCoCSettings        call virkspaces#vscocsettings()$/;"	c
-VSCreateVirkSpace	plugin/virkspaces.vim	/^command! -nargs=0 VSCreateVirkSpace    call virkspaces#vscreatevirkspace()$/;"	c
-VSFindVirkDir	plugin/virkspaces.vim	/^command! -nargs=0 VSFindVirkDir        call virkspaces#vsfindvirkdir()$/;"	c
-VSInfo	plugin/virkspaces.vim	/^command! -nargs=0 VSInfo               call virkspaces#vsinfo()$/;"	c
-VSLoadVirkSpace	plugin/virkspaces.vim	/^command! -nargs=0 VSLoadVirkSpace      call virkspaces#vsloadvirkspace()$/;"	c
-VSMakeSession	plugin/virkspaces.vim	/^command! -nargs=0 VSMakeSession        call virkspaces#vsmakesession()$/;"	c
-VSMakeTagsFile	plugin/virkspaces.vim	/^command! -nargs=0 VSMakeTagsFile       call virkspaces#vsmaketagsfile()$/;"	c
-VSMakeVirkFile	plugin/virkspaces.vim	/^command! -nargs=0 VSMakeVirkFile       call virkspaces#vsmakevirkfile()$/;"	c
-VSMakeVonceFile	plugin/virkspaces.vim	/^command! -nargs=0 VSMakeVonceFile      call virkspaces#vsmakevoncefile()$/;"	c
-VSSourceAllSettings	plugin/virkspaces.vim	/^command! -nargs=0 VSSourceAllSettings  call virkspaces#vssourceallsettings()$/;"	c
-VSSourceSession	plugin/virkspaces.vim	/^command! -nargs=0 VSSourceSession      call virkspaces#vssourcesession()$/;"	c
-VSSourceVirkSettings	plugin/virkspaces.vim	/^command! -nargs=0 VSSourceVirkSettings call virkspaces#vssourcevirksettings()$/;"	c
-VSSourceVonce	plugin/virkspaces.vim	/^command! -nargs=0 VSSourceVonce        call virkspaces#vssourcevonce()$/;"	c
-VSUpdateOnLeave	plugin/virkspaces.vim	/^command! -nargs=0 VSUpdateOnLeave      call virkspaces#vsupdateonleave()$/;"	c
-VSVonceWrite	plugin/virkspaces.vim	/^command! -nargs=1 VSVonceWrite         call virkspaces#vsvoncewrite(<f-args>)$/;"	c
+VirkChangePWD	plugin/virkspaces.vim	/^command! -nargs=0 VirkChangePWD          call virkspaces#change_pwd()$/;"	c
+VirkCleanVirkSpace	plugin/virkspaces.vim	/^command! -nargs=0 VirkCleanVirkSpace     call virkspaces#clean_virkspace()$/;"	c
+VirkCloseBuffers	plugin/virkspaces.vim	/^command! -nargs=1 VirkCloseBuffers       call virkspaces#close_buffers(<f-args>)$/;"	c
+VirkCocCreate	plugin/virkspaces.vim	/^command! -nargs=0 VirkCocCreate          call virkspaces#coc_create()$/;"	c
+VirkCreateVirkSpace	plugin/virkspaces.vim	/^command! -nargs=0 VirkCreateVirkSpace    call virkspaces#create_virkspace()$/;"	c
+VirkFindVirkDir	plugin/virkspaces.vim	/^command! -nargs=0 VirkFindVirkDir        call virkspaces#find_virk_dir()$/;"	c
+VirkInfo	plugin/virkspaces.vim	/^command! -nargs=0 VirkInfo               call virkspaces#info()$/;"	c
+VirkLoadVirkSpace	plugin/virkspaces.vim	/^command! -nargs=0 VirkLoadVirkSpace      call virkspaces#load_virkspace()$/;"	c
+VirkMakeSession	plugin/virkspaces.vim	/^command! -nargs=0 VirkMakeSession        call virkspaces#make_session()$/;"	c
+VirkMakeTagsFile	plugin/virkspaces.vim	/^command! -nargs=0 VirkMakeTagsFile       call virkspaces#make_tags_file()$/;"	c
+VirkMakeVirkFile	plugin/virkspaces.vim	/^command! -nargs=0 VirkMakeVirkFile       call virkspaces#make_virk_file()$/;"	c
+VirkMakeVonceFile	plugin/virkspaces.vim	/^command! -nargs=0 VirkMakeVonceFile      call virkspaces#make_vonce_file()$/;"	c
+VirkSourceAllSettings	plugin/virkspaces.vim	/^command! -nargs=0 VirkSourceAllSettings  call virkspaces#source_all_settings()$/;"	c
+VirkSourceSession	plugin/virkspaces.vim	/^command! -nargs=0 VirkSourceSession      call virkspaces#source_session()$/;"	c
+VirkSourceVirkSettings	plugin/virkspaces.vim	/^command! -nargs=0 VirkSourceVirkSettings call virkspaces#source_virk_settings()$/;"	c
+VirkSourceVonce	plugin/virkspaces.vim	/^command! -nargs=0 VirkSourceVonce        call virkspaces#source_vonce()$/;"	c
 VirkSpaces	README.md	/^VirkSpaces$/;"	c
-__init__	testing/test.py	/^    def __init__(self, args):$/;"	m	class:Fish
+VirkUpdateOnLeave	plugin/virkspaces.vim	/^command! -nargs=0 VirkUpdateOnLeave      call virkspaces#update_on_leave()$/;"	c
+VirkVonceWrite	plugin/virkspaces.vim	/^command! -nargs=1 VirkVonceWrite         call virkspaces#vonce_write(<f-args>)$/;"	c
 g:virk_cd_on_create	plugin/virkspaces.vim	/^let g:virk_cd_on_create          = get(g:, "virk_cd_on_create", 1)$/;"	v
-g:virk_coc_filename	plugin/virkspaces.vim	/^let g:virk_coc_filename          = get(g:, "virk_coc_filename", "coc-settings.json")$/;"	v
-g:virk_coc_settings_enable	plugin/virkspaces.vim	/^let g:virk_coc_settings_enable   = get(g:, "virk_coc_settings_enable", 1)$/;"	v
-g:virk_dirname	plugin/virkspaces.vim	/^let g:virk_dirname               = get(g:, "virk_dirname", ".virkspace")$/;"	v
+g:virk_close_regexes	plugin/virkspaces.vim	/^let g:virk_close_regexes         = get(g:, "virk_close_regexes", ["^$", "FAR.*", "MERGE MSG"])$/;"	v
+g:virk_dirnames	plugin/virkspaces.vim	/^let g:virk_dirnames              = get(g:, "virk_dirnames", [".virkspace", '.git', '.vim'])$/;"	v
+g:virk_enable	autoload/virkspaces.vim	/^    let g:virk_enable = 0$/;"	v
 g:virk_enable	plugin/virkspaces.vim	/^let g:virk_enable                = get(g:, "virk_enable", 1)$/;"	v
 g:virk_ignore_enable	plugin/virkspaces.vim	/^let g:virk_ignore_enable         = get(g:, "virk_ignore_enable", 1)$/;"	v
 g:virk_ignore_filename	plugin/virkspaces.vim	/^let g:virk_ignore_filename       = get(g:, "virk_ignore_filename", ".virkignore")$/;"	v
 g:virk_make_session_on_leave	plugin/virkspaces.vim	/^let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)$/;"	v
-g:virk_root_dir	autoload/virkspaces.vim	/^    let g:virk_root_dir = a:dirname$/;"	v
+g:virk_root_dir	autoload/virkspaces.vim	/^      let g:virk_root_dir = a:dirname$/;"	v
 g:virk_root_dir	plugin/virkspaces.vim	/^let g:virk_root_dir              = ""$/;"	v
 g:virk_session_filename	plugin/virkspaces.vim	/^let g:virk_session_filename      = get(g:, "virk_session_filename", "session.vim")$/;"	v
 g:virk_settings_filename	plugin/virkspaces.vim	/^let g:virk_settings_filename     = get(g:, "virk_settings_filename", "virkspace.vim")$/;"	v
 g:virk_source_session	plugin/virkspaces.vim	/^let g:virk_source_session        = get(g:, "virk_source_session", 1)$/;"	v
+g:virk_ssop	plugin/virkspaces.vim	/^let g:virk_ssop                  = get(g:, "virk_ssop", s:default_ssop)$/;"	v
 g:virk_tags_bin	plugin/virkspaces.vim	/^let g:virk_tags_bin              = get(g:, "virk_tags_bin", "ctags")$/;"	v
 g:virk_tags_enable	plugin/virkspaces.vim	/^let g:virk_tags_enable           = get(g:, "virk_tags_enable", 1)$/;"	v
-g:virk_tags_excludes	plugin/virkspaces.vim	/^let g:virk_tags_excludes         = get(g:, "virk_tags_excludes", [g:virk_dirname])$/;"	v
+g:virk_tags_excludes	plugin/virkspaces.vim	/^let g:virk_tags_excludes         = get(g:, "virk_tags_excludes", g:virk_dirnames)$/;"	v
 g:virk_tags_filename	plugin/virkspaces.vim	/^let g:virk_tags_filename         = get(g:, "virk_tags_filename", "tags")$/;"	v
 g:virk_tags_flags	plugin/virkspaces.vim	/^let g:virk_tags_flags            = get(g:, "virk_tags_flags", "-Rf")$/;"	v
 g:virk_update_on_leave	plugin/virkspaces.vim	/^let g:virk_update_on_leave       = get(g:, "virk_update_on_leave", 1)$/;"	v
 g:virk_vonce_filename	plugin/virkspaces.vim	/^let g:virk_vonce_filename        = get(g:, "virk_vonce_filename", "virkvonce.vim")$/;"	v
-main	testing/test.py	/^def main():$/;"	f
 s:boolean_to_string	autoload/virkspaces.vim	/^function! s:boolean_to_string(bool)$/;"	f
-s:delDirBuffers	autoload/virkspaces.vim	/^function! s:delDirBuffers()$/;"	f
+s:close_dir_buffers	autoload/virkspaces.vim	/^function! s:close_dir_buffers()$/;"	f
+s:close_nerdtree	autoload/virkspaces.vim	/^function! s:close_nerdtree()$/;"	f
+s:close_others	autoload/virkspaces.vim	/^function! s:close_others()$/;"	f
+s:close_terminals	autoload/virkspaces.vim	/^function s:close_terminals()$/;"	f
+s:default_ssop	plugin/virkspaces.vim	/^let s:default_ssop = "blank,buffers,curdir,folds,help,tabpages,winsize"$/;"	v
 s:findVirkDirRecursive	autoload/virkspaces.vim	/^function! s:findVirkDirRecursive(dirname) abort$/;"	f
-s:l	.virkspace/session.vim	/^let s:l = 1 - ((0 * winheight(0) + 29) \/ 59)$/;"	v
-s:l	testing/.virkspace/session.vim	/^let s:l = 9 - ((8 * winheight(0) + 28) \/ 57)$/;"	v
-s:so_save	.virkspace/session.vim	/^let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0$/;"	v
-s:so_save	testing/.virkspace/session.vim	/^let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0$/;"	v
-s:sx	.virkspace/session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v
-s:sx	testing/.virkspace/session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v
+s:handle_close	autoload/virkspaces.vim	/^function s:handle_close(rgx, cmd)$/;"	f
+s:process_first_arg	autoload/virkspaces.vim	/^function! s:process_first_arg(first)$/;"	f
+s:virk_dirname	autoload/virkspaces.vim	/^let s:virk_dirname      = ""$/;"	v
 s:virk_error_report	autoload/virkspaces.vim	/^function s:virk_error_report()$/;"	f
-s:virk_errors	autoload/virkspaces.vim	/^let s:virk_errors                = []$/;"	v
+s:virk_errors	autoload/virkspaces.vim	/^let s:virk_errors       = []$/;"	v
 s:virk_file_exists	autoload/virkspaces.vim	/^function! s:virk_file_exists(fn)$/;"	f
-s:virk_settings_dir	autoload/virkspaces.vim	/^let s:virk_settings_dir          = ""$/;"	v
-s:wipebuf	.virkspace/session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v
-s:wipebuf	testing/.virkspace/session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v
+s:virk_moved	autoload/virkspaces.vim	/^let s:virk_moved        = ""$/;"	v
+s:virk_settings_dir	autoload/virkspaces.vim	/^let s:virk_settings_dir = ""$/;"	v
 s:yesno	autoload/virkspaces.vim	/^function! s:yesno(msg) abort$/;"	f
 virk	plugin/virkspaces.vim	/^augroup virk-spaces$/;"	a
-virkspaces#vschangepwd	autoload/virkspaces.vim	/^function! virkspaces#vschangepwd()$/;"	f
-virkspaces#vscleanvirkspace	autoload/virkspaces.vim	/^function! virkspaces#vscleanvirkspace() abort$/;"	f
-virkspaces#vscocsettings	autoload/virkspaces.vim	/^function! virkspaces#vscocsettings()$/;"	f
-virkspaces#vscreatevirkspace	autoload/virkspaces.vim	/^function! virkspaces#vscreatevirkspace() abort$/;"	f
-virkspaces#vsfindvirkdir	autoload/virkspaces.vim	/^function! virkspaces#vsfindvirkdir() abort$/;"	f
-virkspaces#vsinfo	autoload/virkspaces.vim	/^function! virkspaces#vsinfo()$/;"	f
-virkspaces#vsloadvirkspace	autoload/virkspaces.vim	/^function! virkspaces#vsloadvirkspace()$/;"	f
-virkspaces#vsmakesession	autoload/virkspaces.vim	/^function! virkspaces#vsmakesession()$/;"	f
-virkspaces#vsmaketagsfile	autoload/virkspaces.vim	/^function! virkspaces#vsmaketagsfile()$/;"	f
-virkspaces#vsmakevirkfile	autoload/virkspaces.vim	/^function! virkspaces#vsmakevirkfile()$/;"	f
-virkspaces#vsmakevoncefile	autoload/virkspaces.vim	/^function! virkspaces#vsmakevoncefile()$/;"	f
-virkspaces#vsnerdtreesave	autoload/virkspaces.vim	/^function! virkspaces#vsnerdtreesave()$/;"	f
-virkspaces#vssourceallsettings	autoload/virkspaces.vim	/^function! virkspaces#vssourceallsettings()$/;"	f
-virkspaces#vssourcesession	autoload/virkspaces.vim	/^function! virkspaces#vssourcesession()$/;"	f
-virkspaces#vssourcevirksettings	autoload/virkspaces.vim	/^function! virkspaces#vssourcevirksettings()$/;"	f
-virkspaces#vssourcevonce	autoload/virkspaces.vim	/^function! virkspaces#vssourcevonce()$/;"	f
-virkspaces#vsupdateonleave	autoload/virkspaces.vim	/^function! virkspaces#vsupdateonleave()$/;"	f
-virkspaces#vsvonceremove	autoload/virkspaces.vim	/^function! virkspaces#vsvonceremove(cmd)$/;"	f
-virkspaces#vsvoncewrite	autoload/virkspaces.vim	/^function! virkspaces#vsvoncewrite(cmd, odr)$/;"	f
+virkspaces#clean_virkspace	autoload/virkspaces.vim	/^function! virkspaces#clean_virkspace() abort$/;"	f
+virkspaces#close_buffers	autoload/virkspaces.vim	/^function! virkspaces#close_buffers(lst)$/;"	f
+virkspaces#coc_create	autoload/virkspaces.vim	/^function! virkspaces#coc_create()$/;"	f
+virkspaces#create_virkspace	autoload/virkspaces.vim	/^function! virkspaces#create_virkspace() abort$/;"	f
+virkspaces#find_virk_dir	autoload/virkspaces.vim	/^function! virkspaces#find_virk_dir() abort$/;"	f
+virkspaces#info	autoload/virkspaces.vim	/^function! virkspaces#info()$/;"	f
+virkspaces#load_virkspace	autoload/virkspaces.vim	/^function! virkspaces#load_virkspace()$/;"	f
+virkspaces#make_session	autoload/virkspaces.vim	/^function! virkspaces#make_session()$/;"	f
+virkspaces#make_tags_file	autoload/virkspaces.vim	/^function! virkspaces#make_tags_file()$/;"	f
+virkspaces#make_virk_file	autoload/virkspaces.vim	/^function! virkspaces#make_virk_file()$/;"	f
+virkspaces#make_vonce_file	autoload/virkspaces.vim	/^function! virkspaces#make_vonce_file()$/;"	f
+virkspaces#nerd_tree_save	autoload/virkspaces.vim	/^function! virkspaces#nerd_tree_save()$/;"	f
+virkspaces#source_all_settings	autoload/virkspaces.vim	/^function! virkspaces#source_all_settings()$/;"	f
+virkspaces#source_session	autoload/virkspaces.vim	/^function! virkspaces#source_session()$/;"	f
+virkspaces#source_virk_settings	autoload/virkspaces.vim	/^function! virkspaces#source_virk_settings()$/;"	f
+virkspaces#source_vonce	autoload/virkspaces.vim	/^function! virkspaces#source_vonce()$/;"	f
+virkspaces#status	autoload/virkspaces.vim	/^function! virkspaces#status()$/;"	f
+virkspaces#update_on_leave	autoload/virkspaces.vim	/^function! virkspaces#update_on_leave()$/;"	f
+virkspaces#vonce_remove	autoload/virkspaces.vim	/^function! virkspaces#vonce_remove(cmd)$/;"	f
+virkspaces#vonce_write	autoload/virkspaces.vim	/^function! virkspaces#vonce_write(cmd, odr)$/;"	f
