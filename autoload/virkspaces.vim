@@ -381,7 +381,12 @@ function! s:process_first_arg(first)
     if isdirectory(a:first)
       exec "cd " . a:first
     else
-      exec "cd " . fnamemodify(a:first, ":p:h")
+      let l:dir = fnamemodify(a:first, ":p:h")
+      if isdirectory(l:dir)
+        exec "cd " . l:dir
+      else
+        return
+      endif
     endif
     call virkspaces#find_virk_dir()
   endif
