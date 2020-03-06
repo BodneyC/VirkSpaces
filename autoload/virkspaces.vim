@@ -356,6 +356,7 @@ function! virkspaces#info()
 endfunction
 
 function! virkspaces#source_all_settings()
+  let l:argv = argv()
   if g:virk_tags_enable
     call virkspaces#make_tags_file()
   endif
@@ -370,6 +371,8 @@ function! virkspaces#source_all_settings()
   endif
   call virkspaces#source_vonce()
   call virkspaces#source_virk_settings()
+  %argdel
+  silent exe "argadd " . join(l:argv, '')
 endfunction
 
 function! s:process_first_arg(first)
@@ -398,10 +401,7 @@ endfunction
 function! virkspaces#load_virkspace()
   if ! g:virk_enable | return | endif
   call virkspaces#find_virk_dir()
-  if argc() > 0
-    let l:first = argv()[0]
-    call <SID>process_first_arg(l:first)
-  endif
+  if len(argv(0)) | call <SID>process_first_arg(argv(0)) | endif
   if s:virk_settings_dir == "IGNORE"
     let g:virk_enable = 0
     echom "[VirkSpaces] Found " . g:virk_ignore_filename
@@ -414,9 +414,7 @@ function! virkspaces#load_virkspace()
   endif
   cd `=g:virk_root_dir`
   call virkspaces#source_all_settings() " Sources session, must be before buffer change
-  if exists("l:first") && ! isdirectory(l:first)
-    exec "b " . l:first
-  endif
+  if len(argv(0)) | exec "b " . argv(0) | endif
   echom "[VirkSpaces] Virkspace found: '"
         \ . fnamemodify(s:virk_settings_dir, ":h:t")
         \ . "' (" . s:virk_dirname . ")"
