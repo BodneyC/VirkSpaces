@@ -398,7 +398,7 @@ function! virkspaces#status()
   endif
   let l:root = fnamemodify(g:virk_root_dir, ":t")
   if len(s:virk_moved) > 0
-    return l:root . ' (moved)'
+    return l:root . " (moved)"
   endif
   return l:root
 endfunction
