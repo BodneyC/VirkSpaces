@@ -376,7 +376,7 @@ function! virkspaces#source_all_settings()
 endfunction
 
 function! s:process_first_arg(first)
-  if fnamemodify(a:first, ":p") !~ "^" . g:virk_root_dir
+  if ! len(g:virk_root_dir) || fnamemodify(a:first, ":p") !~ "^" . g:virk_root_dir
     let s:virk_moved = " (moved)"
     if isdirectory(a:first)
       exec "cd " . a:first
