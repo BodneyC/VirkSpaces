@@ -225,7 +225,7 @@ endfunction
 
 function! s:close_dir_buffers()
   for i in map(copy(getbufinfo()), "v:val.bufnr")
-    if isdirectory(buffer_name(i))
+    if isdirectory(buffer_name(i)) && bufexists(i)
       exec "bd!" . i
     endif
   endfor
