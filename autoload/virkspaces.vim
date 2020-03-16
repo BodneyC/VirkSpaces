@@ -334,6 +334,10 @@ endfunction
 
 " ------------- Core functions -------------
 
+function! virkspaces#reset_cwd()
+  exe "cd " . g:virk_root_dir
+endfunction
+
 function! virkspaces#info()
   let l:tmpFile = tempname()
   if g:virk_enable

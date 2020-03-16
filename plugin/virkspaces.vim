@@ -57,6 +57,7 @@ command! -nargs=0 VirkSourceAllSettings  call virkspaces#source_all_settings()
 command! -nargs=0 VirkLoadVirkSpace      call virkspaces#load_virkspace()
 command! -nargs=0 VirkCocCreate          call virkspaces#coc_create()
 command! -nargs=1 VirkCloseBuffers       call virkspaces#close_buffers(<f-args>)
+command! -nargs=0 VirkResetCWD           call virkspaces#reset_cwd()
 
 
 " ------------- Automation AuGroups -------------
