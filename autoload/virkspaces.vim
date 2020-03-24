@@ -376,7 +376,7 @@ function! virkspaces#source_all_settings()
   call virkspaces#source_vonce()
   call virkspaces#source_virk_settings()
   %argdel
-  silent exe "argadd " . join(l:argv, '')
+  silent exe "argadd " . join(l:argv, ' ')
 endfunction
 
 function! s:process_first_arg(first)
