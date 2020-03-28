@@ -264,7 +264,7 @@ CONFIGURATION                                       *VirkSpaceConfiguration*
 
 Most of the configuration is handled by *VirkSpaceGlobalVariables* :
 
-  *g:virk_enable*
+  *g:virk_enabled*
 
       Default: `1`
 

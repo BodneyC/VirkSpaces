@@ -16,7 +16,7 @@
 "
 let s:default_ssop = "blank,buffers,curdir,folds,help,tabpages,winsize"
 
-let g:virk_enable                = get(g:, "virk_enable", 1)
+let g:virk_enabled               = get(g:, "virk_enabled", 1)
 let g:virk_ignore_enable         = get(g:, "virk_ignore_enable", 1)
 let g:virk_ignore_filename       = get(g:, "virk_ignore_filename", ".virkignore")
 let g:virk_dirnames              = get(g:, "virk_dirnames", [".virkspace", '.git', '.vim'])
@@ -58,6 +58,7 @@ command! -nargs=0 VirkLoadVirkSpace      call virkspaces#load_virkspace()
 command! -nargs=0 VirkCocCreate          call virkspaces#coc_create()
 command! -nargs=1 VirkCloseBuffers       call virkspaces#close_buffers(<f-args>)
 command! -nargs=0 VirkResetCWD           call virkspaces#reset_cwd()
+command! -nargs=0 VirkDisable            let g:virk_enabled = v:false
 
 
 " ------------- Automation AuGroups -------------
@@ -65,6 +66,6 @@ command! -nargs=0 VirkResetCWD           call virkspaces#reset_cwd()
 augroup virk-spaces
   autocmd!
   autocmd VimEnter * nested call virkspaces#load_virkspace()
-  autocmd BufEnter * call virkspaces#source_virk_settings()
-  autocmd VimLeave * call virkspaces#update_on_leave()
+  autocmd BufEnter *        call virkspaces#source_virk_settings()
+  autocmd VimLeave *        call virkspaces#update_on_leave()
 augroup END

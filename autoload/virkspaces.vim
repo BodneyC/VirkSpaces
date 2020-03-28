@@ -22,7 +22,7 @@ let s:virk_errors       = []
 " ------------- Sourcing functions -------------
 
 function! virkspaces#source_virk_settings()
-  if ! g:virk_enable | return | endif
+  if ! g:virk_enabled | return | endif
   let l:fn = s:virk_settings_dir . "/" . g:virk_settings_filename
   if filereadable(l:fn) && buflisted(bufnr("%"))
     silent exec "source " . l:fn
@@ -284,7 +284,7 @@ endfunction
 
 function! virkspaces#update_on_leave()
   if ! g:virk_update_on_leave | return | endif
-  if g:virk_enable && s:virk_settings_dir != "IGNORE"
+  if g:virk_enabled && s:virk_settings_dir != "IGNORE"
     call <SID>close_nerdtree()
     call <SID>close_others()
     call <SID>close_terminals()
@@ -340,7 +340,7 @@ endfunction
 
 function! virkspaces#info()
   let l:tmpFile = tempname()
-  if g:virk_enable
+  if g:virk_enabled
     call writefile([
           \   "VirkSpace enabled       : Enabled",
           \   "VirkSpace directory     : " . s:virk_settings_dir,
@@ -376,7 +376,9 @@ function! virkspaces#source_all_settings()
   call virkspaces#source_vonce()
   call virkspaces#source_virk_settings()
   %argdel
-  silent exe "argadd " . join(l:argv, ' ')
+  for l:a in l:argv
+    silent exe "argadd \"" . l:a . "\""
+  endfor
 endfunction
 
 function! s:process_first_arg(first)
@@ -408,16 +410,16 @@ function! virkspaces#status()
 endfunction
 
 function! virkspaces#load_virkspace()
-  if ! g:virk_enable | return | endif
+  if ! g:virk_enabled | return | endif
   call virkspaces#find_virk_dir()
   if len(argv(0)) | call <SID>process_first_arg(argv(0)) | endif
   if s:virk_settings_dir == "IGNORE"
-    let g:virk_enable = 0
+    let g:virk_enabled = 0
     echom "[VirkSpaces] Found " . g:virk_ignore_filename
     return
   endif
   if s:virk_settings_dir == "NONE"
-    let g:virk_enable = 0
+    let g:virk_enabled = 0
     echom "[VirkSpaces] No virkspace found"
     return
   endif
