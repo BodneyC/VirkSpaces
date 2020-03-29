@@ -376,9 +376,8 @@ function! virkspaces#source_all_settings()
   call virkspaces#source_vonce()
   call virkspaces#source_virk_settings()
   %argdel
-  for l:a in l:argv
-    silent exe "argadd \"" . l:a . "\""
-  endfor
+  " Damn spaces
+  silent exe "argadd " . join(map(l:argv, {i, e -> substitute(e, ' ', '\\ ', 'g')}), ' ')
 endfunction
 
 function! s:process_first_arg(first)
