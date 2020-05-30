@@ -258,9 +258,24 @@ endfunction
 function! s:close_others()
   call <SID>handle_close("__Tagbar__.[0-9]*", "TagbarOpen")
   call <SID>handle_close("__vista__", "Vista!! | wincmd h")
-  call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle" )
+  call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle " . g:virk_root_dir)
   call <SID>handle_close("__Mundo__*", "MundoToggle" )
   call virkspaces#close_buffers(g:virk_close_regexes)
+endfunction
+
+function! virkspaces#close_known_if_last()
+  call <SID>close_if_last('coc-explorer', 'CocCommand explorer --toggle ' . g:virk_root_dir)
+endfunction
+
+function! s:close_if_last(ft, cmd)
+  if winnr("$") == 1 && a:ft == &ft
+    if a:ft == &ft
+      call virkspaces#vonce_write(a:cmd, 1)
+      bw | q
+    else
+      call virkspaces#vonce_remove(a:cmd)
+    endif
+  endif
 endfunction
 
 function! s:close_nerdtree()
@@ -411,7 +426,9 @@ endfunction
 function! virkspaces#load_virkspace()
   if ! g:virk_enabled | return | endif
   call virkspaces#find_virk_dir()
-  if len(argv(0)) | call <SID>process_first_arg(argv(0)) | endif
+  if len(argv(0)) && g:virk_move_virk_space
+    call <SID>process_first_arg(argv(0))
+  endif
   if s:virk_settings_dir == "IGNORE"
     let g:virk_enabled = 0
     echom "[VirkSpaces] Found " . g:virk_ignore_filename

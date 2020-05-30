@@ -397,6 +397,15 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
 
       Desc: Regexes for buffers to close on exit
 
+  *g:virk_move_virk_space*
+
+      Default: 0
+
+      Desc: After getting some feedback about the plugin it seems the 
+          majority would not want to be moved into the VirkSpace of a 
+          specific file they opened - this is not disabled by default but 
+          can be re-enabled with this variable
+
 
 ==========================================================================
 TODOS                                                       *VirkSpaceTODOs*

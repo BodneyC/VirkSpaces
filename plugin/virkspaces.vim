@@ -34,6 +34,7 @@ let g:virk_make_session_on_leave = get(g:, "virk_make_session_on_leave", 1)
 let g:virk_update_on_leave       = get(g:, "virk_update_on_leave", 1)
 let g:virk_ssop                  = get(g:, "virk_ssop", s:default_ssop)
 let g:virk_close_regexes         = get(g:, "virk_close_regexes", ["^$", "FAR.*", "MERGE MSG"])
+let g:virk_move_virk_space       = get(g:, "virk_move_virk_space", 0)
 
 let g:virk_root_dir              = ""
 
@@ -66,6 +67,7 @@ command! -nargs=0 VirkDisable            let g:virk_enabled = v:false
 augroup virk-spaces
   autocmd!
   autocmd VimEnter * nested call virkspaces#load_virkspace()
-  autocmd BufEnter *        call virkspaces#source_virk_settings()
   autocmd VimLeave *        call virkspaces#update_on_leave()
+  autocmd BufEnter *        call virkspaces#source_virk_settings()
+  autocmd BufEnter *        call virkspaces#close_known_if_last()
 augroup END
