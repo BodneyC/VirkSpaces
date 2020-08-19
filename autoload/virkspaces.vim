@@ -23,23 +23,23 @@ let s:virk_errors       = []
 
 function! virkspaces#source_virk_settings()
   if ! g:virk_enabled | return | endif
-  let l:fn = s:virk_settings_dir . "/" . g:virk_settings_filename
-  if filereadable(l:fn) && buflisted(bufnr("%"))
-    silent exec "source " . l:fn
+  let fn = s:virk_settings_dir . "/" . g:virk_settings_filename
+  if filereadable(fn) && buflisted(bufnr("%"))
+    silent exec "source " . fn
   endif
 endfunction
 
 function! virkspaces#source_session()
-  let l:fn = s:virk_settings_dir . "/" . g:virk_session_filename
-  if filereadable(l:fn)
-    silent exe "source " . l:fn
+  let fn = s:virk_settings_dir . "/" . g:virk_session_filename
+  if filereadable(fn)
+    silent exe "source " . fn
   endif
 endfunction
 
 function! virkspaces#source_vonce()
-  let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
-  if filereadable(l:fn)
-    silent exec "source " . l:fn
+  let fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
+  if filereadable(fn)
+    silent exec "source " . fn
   endif
 endfunction
 
@@ -53,23 +53,23 @@ function! s:findVirkDirRecursive(dirname) abort
   if g:virk_ignore_enable && filereadable(a:dirname . "/" . g:virk_ignore_filename)
     return "IGNORE"
   endif
-  for l:vdn in g:virk_dirnames
-    let l:settingsDir = a:dirname . "/" . l:vdn
-    if isdirectory(l:settingsDir)
+  for vdn in g:virk_dirnames
+    let settingsDir = a:dirname . "/" . vdn
+    if isdirectory(settingsDir)
       let g:virk_root_dir = a:dirname
-      let s:virk_dirname = l:vdn
-      return l:settingsDir
+      let s:virk_dirname = vdn
+      return settingsDir
     endif
   endfor
-  let l:parentDir = strpart(a:dirname, 0, strridx(a:dirname, "/"))
-  if isdirectory(l:parentDir)
-    return s:findVirkDirRecursive(l:parentDir)
+  let parentDir = strpart(a:dirname, 0, strridx(a:dirname, "/"))
+  if isdirectory(parentDir)
+    return s:findVirkDirRecursive(parentDir)
   endif
 endfunction
 
 function! virkspaces#find_virk_dir() abort
-  let l:curDir = getcwd()
-  let s:virk_settings_dir = s:findVirkDirRecursive(l:curDir)
+  let curDir = getcwd()
+  let s:virk_settings_dir = s:findVirkDirRecursive(curDir)
 endfunction
 
 " ------------- Deletion functions -------------
@@ -78,20 +78,20 @@ function! virkspaces#clean_virkspace() abort
   if s:virk_settings_dir == "IGNORE"
     return
   endif
-  let l:delall = s:yesno("Delete all in " . s:virk_settings_dir . "?")
-  for l:fn in [
+  let delall = s:yesno("Delete all in " . s:virk_settings_dir . "?")
+  for fn in [
         \   g:virk_settings_filename,
         \   g:virk_session_filename,
         \   g:virk_vonce_filename,
         \   g:virk_tags_filename,
         \ ]
-    let l:fn = s:virk_settings_dir . "/" . l:fn
-    if filereadable(l:fn)
-      if l:delall
-        call delete(l:fn)
+    let fn = s:virk_settings_dir . "/" . fn
+    if filereadable(fn)
+      if delall
+        call delete(fn)
       else
-        if s:yesno("Delete " . l:fn . "?")
-          call delete(l:fn)
+        if s:yesno("Delete " . fn . "?")
+          call delete(fn)
         endif
       endif
     endif
@@ -101,23 +101,23 @@ endfunction
 " ------------- Creation functions -------------
 
 function! virkspaces#create_virkspace() abort
-  let l:projDir = input("Dir: ", expand("%:p:h"))
-  if ! isdirectory(l:projDir)
-    if ! s:yesno("\"" . l:projDir . "\" is not a directory, make dirs?")
+  let project_dir = input("Dir: ", expand("%:p:h"))
+  if ! isdirectory(project_dir)
+    if ! s:yesno("\"" . project_dir . "\" is not a directory, make dirs?")
       return
     endif
   endif
-  if isdirectory(l:projDir . "/" . g:virk_dirnames[0])
-    if ! s:yesno("\"" . l:projDir . "/" . g:virk_dirnames[0] . "\" exists, overwrite?")
+  if isdirectory(project_dir . "/" . g:virk_dirnames[0])
+    if ! s:yesno("\"" . project_dir . "/" . g:virk_dirnames[0] . "\" exists, overwrite?")
       return
     else
-      if delete(fnameescape(l:projDir . "/" . g:virk_dirnames[0]))
-        echom "[VirkSpaces] \"" . l:projDir . "/" . g:virk_dirnames[0] . " could not be deleted, exiting..."
+      if delete(fnameescape(project_dir . "/" . g:virk_dirnames[0]))
+        echom "[VirkSpaces] \"" . project_dir . "/" . g:virk_dirnames[0] . " could not be deleted, exiting..."
         return
       endif
     endif
   endif
-  call mkdir(l:projDir . "/" . g:virk_dirnames[0])
+  call mkdir(project_dir . "/" . g:virk_dirnames[0])
   echom "[VirkSpaces] Project directory created"
   if g:virk_cd_on_create == 0
     if s:yesno("CD to project directory parent?")
@@ -154,68 +154,68 @@ function! virkspaces#coc_create()
 endfunction
 
 function! virkspaces#make_tags_file()
-  let l:fn = s:virk_settings_dir . "/" . g:virk_tags_filename
-  let l:exc = ""
+  let fn = s:virk_settings_dir . "/" . g:virk_tags_filename
+  let exc = ""
   if len(g:virk_tags_excludes) > 0
-    let l:exc = join(" --exclude ", g:virk_tags_excludes)
+    let exc = join(" --exclude ", g:virk_tags_excludes)
   endif
-  exec "set tags=" . l:fn
-  silent exec "!" . g:virk_tags_bin . " " . g:virk_tags_flags . " " . l:fn . " " . l:exc . " " . g:virk_root_dir
+  exec "set tags=" . fn
+  silent exec "!" . g:virk_tags_bin . " " . g:virk_tags_flags . " " . fn . " " . exc . " " . g:virk_root_dir
 endfunction
 
 function! virkspaces#make_vonce_file()
-  let l:vonce_file = s:virk_settings_dir . "/" . g:virk_vonce_filename
-  exec "e " . l:vonce_file
+  let vonce_file = s:virk_settings_dir . "/" . g:virk_vonce_filename
+  exec "e " . vonce_file
   exec "au! BufWrite <buffer> so %"
 endfunction
 
 function! virkspaces#make_virk_file()
-  let l:virk_file = s:virk_settings_dir . "/" . g:virk_settings_filename
-  exec "e " . l:virk_file
+  let virk_file = s:virk_settings_dir . "/" . g:virk_settings_filename
+  exec "e " . virk_file
   exec "au! BufWrite <buffer> so %"
 endfunction
 
 function! virkspaces#make_session()
-  let l:ssop = &ssop
+  let ssop = &ssop
   exec 'set ssop=' . g:virk_ssop
   exec "mksession! " . s:virk_settings_dir . "/" . g:virk_session_filename
-  let &ssop = l:ssop
+  let &ssop = ssop
 endfunction
 
 " ------------- Updating functions -------------
 
 function! virkspaces#vonce_write(cmd, odr)
-  let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
-  if ! filereadable(l:fn)
-    call writefile([a:cmd], l:fn)
+  let fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
+  if ! filereadable(fn)
+    call writefile([a:cmd], fn)
     return
   endif
-  let l:vonce = readfile(l:fn)
-  for line in l:vonce
+  let vonce = readfile(fn)
+  for line in vonce
     if line =~ a:cmd
       return
     endif
   endfor
   if a:odr
-    call add(l:vonce, a:cmd)
+    call add(vonce, a:cmd)
   else
-    call insert(l:vonce, a:cmd, 0)
+    call insert(vonce, a:cmd, 0)
   endif
-  call writefile(l:vonce, l:fn)
+  call writefile(vonce, fn)
 endfunction
 
 function! virkspaces#vonce_remove(cmd)
-  let l:fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
-  if ! filereadable(l:fn)
+  let fn = s:virk_settings_dir . "/" . g:virk_vonce_filename
+  if ! filereadable(fn)
     return
   endif
-  let l:vonce = readfile(l:fn)
-  let l:idx = index(l:vonce, a:cmd)
-  if l:idx == -1
+  let vonce = readfile(fn)
+  let idx = index(vonce, a:cmd)
+  if idx == -1
     return
   endif
-  call remove(l:vonce, l:idx)
-  call writefile(l:vonce, l:fn)
+  call remove(vonce, idx)
+  call writefile(vonce, fn)
 endfunction
 
 function! virkspaces#nerd_tree_save()
@@ -232,17 +232,17 @@ function! s:close_dir_buffers()
 endfunction
 
 function s:handle_close(rgx, cmd)
-  let l:found = v:false
+  let found = v:false
   for b in filter(range(1, bufnr("$")), "bufexists(v:val)")
-    let l:name = bufname(b)
-    if match(l:name, a:rgx) != -1
+    let name = bufname(b)
+    if match(name, a:rgx) != -1
       if bufwinnr(b) != -1
-        let l:found = v:true
+        let found = v:true
       endif
       exec "bw!" . b
     endif
   endfor
-  if l:found
+  if found
     call virkspaces#vonce_write(a:cmd, 1)
   else
     call virkspaces#vonce_remove(a:cmd)
@@ -258,13 +258,13 @@ endfunction
 function! s:close_others()
   call <SID>handle_close("__Tagbar__.[0-9]*", "TagbarOpen")
   call <SID>handle_close("__vista__", "Vista!! | wincmd h")
-  call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --toggle " . g:virk_root_dir)
+  call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --no-focus --toggle " . g:virk_root_dir)
   call <SID>handle_close("__Mundo__*", "MundoToggle" )
   call virkspaces#close_buffers(g:virk_close_regexes)
 endfunction
 
 function! virkspaces#close_known_if_last()
-  call <SID>close_if_last('coc-explorer', 'CocCommand explorer --toggle ' . g:virk_root_dir)
+  call <SID>close_if_last('coc-explorer', 'CocCommand explorer --no-focus --toggle ' . g:virk_root_dir)
 endfunction
 
 function! s:close_if_last(ft, cmd)
@@ -279,13 +279,13 @@ function! s:close_if_last(ft, cmd)
 endfunction
 
 function! s:close_nerdtree()
-  let l:nt_msg = 'tabn 1 | NERDTreeToggle | exec "NERDTreeProjectLoadFromCWD" | normal! <C-w><C-l>'
+  let nt_msg = 'tabn 1 | NERDTreeToggle | exec "NERDTreeProjectLoadFromCWD" | normal! <C-w><C-l>'
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     call virkspaces#nerd_tree_save()
     tabdo NERDTreeClose
-    call virkspaces#vonce_write(l:nt_msg, 1)
+    call virkspaces#vonce_write(nt_msg, 1)
   else
-    call virkspaces#vonce_remove(l:nt_msg)
+    call virkspaces#vonce_remove(nt_msg)
   endif
 endfunction
 
@@ -315,10 +315,10 @@ endfunction
 " https://vi.stackexchange.com/questions/9432
 function! s:yesno(msg) abort
   echo a:msg . " [yn] "
-  let l:ans = nr2char(getchar())
-  if l:ans =~ "y"
+  let ans = nr2char(getchar())
+  if ans =~ "y"
     return 1
-  elseif l:ans =~ "n"
+  elseif ans =~ "n"
     return 0
   else
     echo "[yn]"
@@ -341,8 +341,8 @@ function! s:virk_file_exists(fn)
 endfunction
 
 function s:virk_error_report()
-  for l:e in s:virk_errors
-    echom "[VirkSpaces] " . l:e
+  for e in s:virk_errors
+    echom "[VirkSpaces] " . e
   endfor
   let s:virk_errors = []
 endfunction
@@ -354,7 +354,7 @@ function! virkspaces#reset_cwd()
 endfunction
 
 function! virkspaces#info()
-  let l:tmpFile = tempname()
+  let tmpFile = tempname()
   if g:virk_enabled
     call writefile([
           \   "VirkSpace enabled       : Enabled",
@@ -366,16 +366,16 @@ function! virkspaces#info()
           \   "Update Vonce on leave   : " . s:boolean_to_string(g:virk_update_on_leave),
           \   "Make session on leave   : " . s:boolean_to_string(g:virk_make_session_on_leave),
           \   "Errors                  : " . join(s:virk_errors, ",")
-          \ ], l:tmpFile)
+          \ ], tmpFile)
   else
-    call writefile(["VirkSpace enabled: Disabled"], l:tmpFile)
+    call writefile(["VirkSpace enabled: Disabled"], tmpFile)
   endif
-  exec "split " . l:tmpFile
+  exec "split " . tmpFile
   setl buftype=nofile bufhidden=wipe nobuflisted ro
 endfunction
 
 function! virkspaces#source_all_settings()
-  let l:argv = argv()
+  let argv = argv()
   if g:virk_tags_enable
     call virkspaces#make_tags_file()
   endif
@@ -392,7 +392,7 @@ function! virkspaces#source_all_settings()
   call virkspaces#source_virk_settings()
   %argdel
   " Damn spaces
-  silent exe "argadd " . join(map(l:argv, {i, e -> substitute(e, ' ', '\\ ', 'g')}), ' ')
+  silent exe "argadd " . join(map(argv, {i, e -> substitute(e, ' ', '\\ ', 'g')}), ' ')
 endfunction
 
 function! s:process_first_arg(first)
@@ -401,9 +401,9 @@ function! s:process_first_arg(first)
     if isdirectory(a:first)
       exec "cd " . a:first
     else
-      let l:dir = fnamemodify(a:first, ":p:h")
-      if isdirectory(l:dir)
-        exec "cd " . l:dir
+      let dir = fnamemodify(a:first, ":p:h")
+      if isdirectory(dir)
+        exec "cd " . dir
       else
         return
       endif
@@ -416,11 +416,11 @@ function! virkspaces#status()
   if ! exists('g:virk_root_dir')
     return ''
   endif
-  let l:root = fnamemodify(g:virk_root_dir, ":t")
+  let root = fnamemodify(g:virk_root_dir, ":t")
   if len(s:virk_moved) > 0
-    return l:root . " (moved)"
+    return root . " (moved)"
   endif
-  return l:root
+  return root
 endfunction
 
 function! virkspaces#load_virkspace()
