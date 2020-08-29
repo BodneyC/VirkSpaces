@@ -302,7 +302,9 @@ function! virkspaces#update_on_leave()
   if g:virk_enabled && s:virk_settings_dir != "IGNORE"
     call <SID>close_nerdtree()
     call <SID>close_others()
-    call <SID>close_terminals()
+    if g:virk_close_terminals
+      call <SID>close_terminals()
+    endif
     call <SID>close_dir_buffers()
     if g:virk_make_session_on_leave
       call virkspaces#make_session()

@@ -35,6 +35,7 @@ let g:virk_update_on_leave       = get(g:, "virk_update_on_leave", 1)
 let g:virk_ssop                  = get(g:, "virk_ssop", s:default_ssop)
 let g:virk_close_regexes         = get(g:, "virk_close_regexes", ["^$", "FAR.*", "MERGE MSG"])
 let g:virk_move_virk_space       = get(g:, "virk_move_virk_space", 0)
+let g:virk_close_terminals       = get(g:, "virk_close_terminals", 0)
 
 let g:virk_root_dir              = ""
 

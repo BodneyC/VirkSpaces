@@ -406,6 +406,12 @@ Most of the configuration is handled by *VirkSpaceGlobalVariables* :
           specific file they opened - this is not disabled by default but 
           can be re-enabled with this variable
 
+  *g:virk_close_terminals*
+
+      Default: 0
+
+      Desc: Specifies that Virk should close terminal buffers on leave
+
 
 ==========================================================================
 TODOS                                                       *VirkSpaceTODOs*
