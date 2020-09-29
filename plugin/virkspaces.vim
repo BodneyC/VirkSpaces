@@ -36,6 +36,7 @@ let g:virk_ssop                  = get(g:, "virk_ssop", s:default_ssop)
 let g:virk_close_regexes         = get(g:, "virk_close_regexes", ["^$", "FAR.*", "MERGE MSG"])
 let g:virk_move_virk_space       = get(g:, "virk_move_virk_space", 0)
 let g:virk_close_terminals       = get(g:, "virk_close_terminals", 0)
+let g:virk_close_by_ft           = get(g:, "virk_close_by_ft", {})
 
 let g:virk_root_dir              = ""
 
@@ -61,7 +62,6 @@ command! -nargs=0 VirkCocCreate          call virkspaces#coc_create()
 command! -nargs=1 VirkCloseBuffers       call virkspaces#close_buffers(<f-args>)
 command! -nargs=0 VirkResetCWD           call virkspaces#reset_cwd()
 command! -nargs=0 VirkDisable            let g:virk_enabled = v:false
-
 
 " ------------- Automation AuGroups -------------
 

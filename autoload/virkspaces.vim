@@ -231,7 +231,7 @@ function! s:close_dir_buffers()
   endfor
 endfunction
 
-function s:handle_close(rgx, cmd)
+function s:close_bufs_by_rgx(rgx, cmd)
   let found = v:false
   for b in filter(range(1, bufnr("$")), "bufexists(v:val)")
     let name = bufname(b)
@@ -249,22 +249,34 @@ function s:handle_close(rgx, cmd)
   endif
 endfunction
 
+function s:close_bufs_by_ft(ft, cmd)
+  let found = v:false
+  for b in filter(range(1, bufnr("$")), "bufexists(v:val)")
+    if getbufvar(b, '&ft') == a:ft
+      if bufwinnr(b) != -1
+        let found = v:true
+      endif
+      exec "bw!" . b
+    endif
+  endfor
+  if found
+    call virkspaces#vonce_write(a:cmd, 1)
+  else
+    call virkspaces#vonce_remove(a:cmd)
+  endif
+endfunction
+
 function! virkspaces#close_buffers(lst)
   if len(a:lst)
-    exec 'call <SID>handle_close("\\(' . join(a:lst, "\\\\|") . '\\)", "")'
+    exec 'call <SID>close_bufs_by_rgx("\\(' . join(a:lst, "\\\\|") . '\\)", "")'
   endif
 endfunction
 
 function! s:close_others()
-  call <SID>handle_close("__Tagbar__.[0-9]*", "TagbarOpen")
-  call <SID>handle_close("__vista__", "Vista!! | wincmd h")
-  call <SID>handle_close("\\[coc-explorer\\].*", "CocCommand explorer --no-focus --toggle " . g:virk_root_dir)
-  call <SID>handle_close("__Mundo__*", "MundoToggle" )
+  for [ft, cmd] in items(g:virk_close_by_ft)
+    call <SID>close_bufs_by_ft(ft, cmd)
+  endfor
   call virkspaces#close_buffers(g:virk_close_regexes)
-endfunction
-
-function! virkspaces#close_known_if_last()
-  call <SID>close_if_last('coc-explorer', 'CocCommand explorer --no-focus --toggle ' . g:virk_root_dir)
 endfunction
 
 function! s:close_if_last(ft, cmd)
@@ -278,7 +290,12 @@ function! s:close_if_last(ft, cmd)
   endif
 endfunction
 
+function! virkspaces#close_known_if_last()
+  call <SID>close_if_last('coc-explorer', 'CocCommand explorer --no-focus --toggle ' . g:virk_root_dir)
+endfunction
+
 function! s:close_nerdtree()
+  if ! exists(':NERDTreeToggle') | return | endif
   let nt_msg = 'tabn 1 | NERDTreeToggle | exec "NERDTreeProjectLoadFromCWD" | normal! <C-w><C-l>'
   if exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1
     call virkspaces#nerd_tree_save()
@@ -398,7 +415,7 @@ function! virkspaces#source_all_settings()
 endfunction
 
 function! s:process_first_arg(first)
-  if ! len(g:virk_root_dir) || fnamemodify(a:first, ":p") !~ "^" . g:virk_root_dir
+  if ! len(g:virk_root_dir) || a:first !~ "^" . g:virk_root_dir
     let s:virk_moved = " (moved)"
     if isdirectory(a:first)
       exec "cd " . a:first
@@ -427,9 +444,12 @@ endfunction
 
 function! virkspaces#load_virkspace()
   if ! g:virk_enabled | return | endif
+  let first = argv(0)
+  if len(first) | let first = fnamemodify(first, ':p') | endif
+  echom first
   call virkspaces#find_virk_dir()
-  if len(argv(0)) && g:virk_move_virk_space
-    call <SID>process_first_arg(argv(0))
+  if len(first) && g:virk_move_virk_space
+    call <SID>process_first_arg(first)
   endif
   if s:virk_settings_dir == "IGNORE"
     let g:virk_enabled = 0
@@ -443,7 +463,7 @@ function! virkspaces#load_virkspace()
   endif
   cd `=g:virk_root_dir`
   call virkspaces#source_all_settings() " Sources session, must be before buffer change
-  if len(argv(0)) | exec "b " . argv(0) | endif
+  if len(first) | exec "b " . first | endif
   echom "[VirkSpaces] Virkspace found: '"
         \ . fnamemodify(s:virk_settings_dir, ":h:t")
         \ . "' (" . s:virk_dirname . ")"
