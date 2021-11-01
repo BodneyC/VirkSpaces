@@ -64,4 +64,5 @@ augroup virk-spaces
   autocmd VimLeave *        call virkspaces#update()
   autocmd BufEnter *        call virkspaces#source_settings()
   autocmd BufEnter *        call virkspaces#close_known()
+  autocmd SessionLoadPost * call virkspaces#source_vonce()
 augroup END

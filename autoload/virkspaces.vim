@@ -366,7 +366,6 @@ function! virkspaces#source_all()
       call virkspaces#make_session()
     endtry
   endif
-  call virkspaces#source_vonce()
   call virkspaces#source_settings()
   %argdel
   " Damn spaces
